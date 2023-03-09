@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PVWAInformation>
+	<!-- 
+		  Address:  IP, Shortname, or Fully Qualified Domain Name (FQDN)
+
+		   Schema:  HTTP or HTTPS.  Really should be HTTPS
+
+		Base Path:  Normally this is PasswordVault
+
+		     Port:  Default for HTTPS is 443.
+
+		IgnoreSSL:  If True, certificate error are ignored.  Should be False.
+	-->
+	<Address>CyberArkPAS.Company.com</Address>
+	<Schema>HTTPS</Schema>
+	<BasePath>PasswordVault</BasePath>
+	<Port>443</Port>
+	<IgnoreSSL>False</IgnoreSSL>
+</PVWAInformation>
+<PVWAAuthentication>
+	<!--
+	Method:  The type of authentication to use when connecting to the REST API.
+		 Values:  CyberArk, LDAP, Radius, Windows, SAML, PTA, Shared, PKIPN, OIDC
+
+	Source:  Where to get the credential to be used with the Authentication Method.
+		 Values:  Prompt, AAM, CCP, RESTAPI, LocalFile, PKI
+	-->
+	<Method>CyberArk</Method>
+	<Source>Prompt</Source>
+</PVWAAuthentication>
+<AuthSourceAttributes>
+	<!--
+	           FilePath:  The full path to the Local Credential File.
+
+	      PKIAttributes:  Used by Where-Object to identify the certificate.
+			      If more than one meets these attributes you will be asked to 
+			      choose from a GUI.
+			      Example:  Thumbprint -eq '1234' -and FriendlyName -eq 'My Cert'
+
+	CustomPromptEnabled:  If True then the custom prompt will be used.  False it will be ignored.
+
+	  CustomPromptTitle:  You can specify a custom title that may trigger automatic population by some password managers.
+	-->
+	<FilePath>C:\Credential\MyCredFile.cred</FilePath>
+	<PKIAttributes>Thumbprint -eq '1234' -and FriendlyName -eq 'My Cert'</PKIAttributes>
+	<CustomPromptEnabled>False</CustomPromptEnabled>
+	<CustomPromptTitle>Enter the Logon Username and Password.</CustomPromptTitle>
+	<CredentialRetrieval>
+		<!--
+			If using CCP or AAM.
+		       SafeName:  The name of the Safe where the credential is stored.
+
+		     FolderName:  The name of the folder where the credential is stored.  Normally Root.
+
+			  Query:  The properly formated query to identify the credential.
+
+		RetrievalReason:  If required.  The reason the credential is being retrieved.
+		-->
+		<SafeName>MySafe</SafeName>
+		<FolderName>Root</FolderName>
+		<Query></Query>
+		<RetrievalReason></RetrievalReason>
+		<AAM>
+			<!--
+				ClientPath:  The full path and filename to the CLI SDK.
+			-->
+			<ClientPath>C:\Program Files (x86)\CyberArk\ApplicationPasswordSdk\CLIPasswordSDK64.exe</ClientPath>
+		</AAM>
+		<CCP>
+			<!--
+				   URL:  This is the full URL to the Central Credential Provider (CCP)
+					 If using Client Certificate Authentication
+
+			      CertPath:  The full path to the locally stored certificate.
+					 This can be a certificate file or a certificate store.
+					 Example:  Cert:\CurrentUser\My
+					 Example:  Cert:\CurrentUser\*1234
+						   1234 is the thumbprint of the certificate.
+
+			CertAttributes:  Used by Where-Object to identify the certificate.
+			      		  Example:  Thumbprint -eq '1234' -and FriendlyName -eq 'My Cert'
+			-->
+			<URL>https://CyberArkPAS.Company.com/AIMWebService</URL>
+			<CertPath>Cert:\CurrentUser\My</CertPath>
+			<CertAttributes>Thumbprint -eq '1234' -and FriendlyName -eq 'My Cert'</CertAttributes>
+		</CCP>
+	</CredentialRetrieval>
+</AuthSourceAttributes>
+<Logging>
+	<!--
+	Destination:  This is where the logging information will be sent.
+		      Both, Console, File
+
+	      Level:  This is the level of logging.
+		      Levels:  None, Critical, Error, Warning, Information, Debug, Verbose
+
+	     Folder:  This can be a relative path or a fully qualified path.
+
+	       File:  This is the name of the log file and extension.
+		      You can add a date and time to the filename by using square brackets []
+		      This is the datetime string formating.
+		      Example:  [yyyy-MM-dd HH.mm.ss.f]
+		      https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings?view=netframework-4.8
+	-->
+	<Destination>Both</Destination>
+	<Level>Verbose</Level>
+	<Folder>Logs</Folder>
+	<File>[yyyy-MM-dd]_Prod_Scripted_Actions.log</File>
+</Logging>
