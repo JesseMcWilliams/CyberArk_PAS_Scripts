@@ -10,7 +10,7 @@ Using Module Logger
             Mandatory = $false,
             ValueFromPipeline = $true
         )]
-        [string] $ConfigFile = "Development.xml",
+        [string] $ConfigFile = "\Conf\Development.xml",
 
         [parameter(
             Mandatory = $false,
@@ -88,7 +88,7 @@ $Logger.Write(("******************** {0} ********************" -f "Starting"), "
 
 # Get the configuration information from the specified XML file.
 $Logger.Write(("Getting Configuration Information from :  {0}" -f $ConfigFile), "Information")
-$_xmlDoc = Read-Configuration -Path "Development.xml"
+$_xmlDoc = Read-Configuration -Path $ConfigFile
 
 # Get the Configuration element from the XML document.
 $_Configuration = $_xmlDoc.Configuration
@@ -134,7 +134,6 @@ $_PVWAURI = Get-NewURI @_pvwaProperties
 
 $Logger.Write(("              New PVWA URI  :  {0}" -f $_PVWAURI), "Debug")
 
-
 # Get the First Credential Request object.
 $_CredReqStage = 1
 
@@ -175,6 +174,7 @@ if (($_firstCredential) -and (Test-Credential -Credential $_firstCredential["Cre
         BaseURI = $_PVWAURI
         AuthType = $_firstCredential["Method"]
         Credential = $_firstCredential["Credential"]
+        IgnoreSSL = $_Configuration.PVWAInformation.IgnoreSSL
     }
     $firstSessionToken = Get-SessionToken @_firstSessionAttributes
 

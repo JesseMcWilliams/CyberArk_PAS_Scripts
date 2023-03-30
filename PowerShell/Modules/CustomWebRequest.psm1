@@ -7,58 +7,49 @@ function Invoke-CustomWebRequest
     [cmdletbinding(DefaultParameterSetName = 'WebSession')]
     Param(
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [string] $URI,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [ValidateSet("Delete","Get","Head","Merge","Options","Patch","Post","Post","Put","Trace","Default")]
         [string] $Method,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [ValidateSet("None","Basic","Bearer","OAuth")]
         [string] $Authentication,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [hashtable] $Headers,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [object] $Body,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [string] $ContentType = "application/json",
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [pscredential] $Credential,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [System.Security.Cryptography.X509Certificates.X509Certificate2] $Certificate,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
         [switch] $EnableDebug,
 
@@ -72,7 +63,12 @@ function Invoke-CustomWebRequest
             Mandatory = $false,
             ParameterSetName = 'WebSession'
         )]
-        [Microsoft.PowerShell.Commands.WebRequestSession] $WebSession
+        [Microsoft.PowerShell.Commands.WebRequestSession] $WebSession,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+		[bool] $SkipCertificateCheck = $false
     )
 
     Begin
@@ -89,6 +85,64 @@ function Invoke-CustomWebRequest
             # Update Body to the JSON Body
             $PSBoundParameters["Body"] = $_jsonBody
         }
+
+        # Check if Certificate Errors should be ignored.
+        Switch ($PSBoundParameters.ContainsKey('SkipCertificateCheck')) {
+
+			$true 
+            {
+				#SkipCertificateCheck Declared
+                Write-Warning ("{0} |    Warning  | Skipping Certificate Validation" -f $(Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+                
+				if ( -not (Test-IsCoreCLR)) {
+
+					# Check for the PowerShell Version.
+                    if ($PSVersionTable.PSVersion.Major -ge 6)
+                    {
+                        # Version 6.0.0 and higher have the Skip Certificate Check parameter.
+                    }
+                    else
+                    {
+                        #Remove parameter, incompatible with PowerShell
+                        $PSBoundParameters.Remove('SkipCertificateCheck') | Out-Null
+
+                        if ($SkipCertificateCheck) 
+                        {
+                            #Skip SSL Validation
+                            $null = Skip-CertificateCheck
+                        }
+                    }
+
+				} else {
+
+					#PWSH
+					if ($SkipCertificateCheck) 
+                    {
+						#Ongoing SSL Validation Bypass Required
+						$Script:SkipCertificateCheck = $true
+					}
+				}
+			}
+
+			$false 
+            {
+
+				#SkipCertificateCheck Not Declared
+				#SSL Validation Bypass Previously Requested
+				If ($Script:SkipCertificateCheck) 
+                {
+					#PWSH Zone
+					if (Test-IsCoreCLR)
+                    {
+
+						#Add SkipCertificateCheck to PS Core command
+						#Parameter must be included for all pwsh invocations of Invoke-WebRequest
+						$PSBoundParameters.Add('SkipCertificateCheck', $true)
+					}
+				}
+			}
+		}
+
 
     }
     Process
@@ -230,6 +284,78 @@ function Invoke-CustomWebRequest
         return $_retObject
     }
 }
+Function Test-IsCoreCLR 
+{
+	<#
+        .SYNOPSIS
+        Tests for PWSH
 
+        .DESCRIPTION
+        Returns "$true" if run from PWSH
+        Returns "$false" if run from PowerShell
+
+        .EXAMPLE
+        Test-IsCoreCLR
+
+        Returns "$true" if run from PWSH
+        Returns "$false" if run from PowerShell
+
+    #>
+
+	if ($IsCoreCLR -or $PSEdition -eq 'Core') {
+
+		$true
+
+	} else {
+
+		$false
+
+	}
+
+}
+Function Skip-CertificateCheck
+{
+	<#
+        .SYNOPSIS
+        Bypass SSL Validation
+
+        .DESCRIPTION
+        Enables skipping of ssl certificate validation for current PowerShell session.
+
+        .EXAMPLE
+        Skip-CertificateCheck
+
+	#>
+
+	$CompilerParameters = New-Object System.CodeDom.Compiler.CompilerParameters
+	$CompilerParameters.GenerateExecutable = $false
+	$CompilerParameters.GenerateInMemory = $true
+	$CompilerParameters.IncludeDebugInformation = $false
+	$CompilerParameters.ReferencedAssemblies.Add("System.DLL") | Out-Null
+	$CertificatePolicy = @'
+        namespace Local.ToolkitExtensions.Net.CertificatePolicy
+        {
+            public class TrustAll : System.Net.ICertificatePolicy
+            {
+                public bool CheckValidationResult(System.Net.ServicePoint sp,System.Security.Cryptography.X509Certificates.X509Certificate cert, System.Net.WebRequest req, int problem)
+                {
+                    return true;
+                }
+            }
+        }
+'@
+
+	if ( -not (Test-IsCoreCLR)) {
+
+		$CSharpCodeProvider = New-Object Microsoft.CSharp.CSharpCodeProvider
+		$PolicyResult = $CSharpCodeProvider.CompileAssemblyFromSource($CompilerParameters, $CertificatePolicy)
+		$CompiledAssembly = $PolicyResult.CompiledAssembly
+		## Create an instance of TrustAll and attach it to the ServicePointManager
+		$TrustAll = $CompiledAssembly.CreateInstance("Local.ToolkitExtensions.Net.CertificatePolicy.TrustAll")
+		[System.Net.ServicePointManager]::CertificatePolicy = $TrustAll
+
+	}
+
+}
 
 #endregion Web Request Functions

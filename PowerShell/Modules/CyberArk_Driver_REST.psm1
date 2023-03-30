@@ -110,14 +110,12 @@ function Get-SessionToken
     [cmdletbinding()]
     Param(
         [parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
+            Mandatory = $true
         )]
         [System.UriBuilder] $BaseURI,
 
         [parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
+            Mandatory = $true
         )]
         [ValidateScript({
             if (-not ($PVWAAUTHURL.Keys -contains $PSItem))
@@ -127,10 +125,14 @@ function Get-SessionToken
         [string] $AuthType,
 
         [parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            Mandatory = $false
         )]
-        [pscredential] $Credential
+        [pscredential] $Credential,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 
     # Make a copy of the BaseURI so we don't change it.
@@ -158,6 +160,7 @@ function Get-SessionToken
                 Credential = $Credential
                 Body = $_authBody
                 Headers = $_authHeaders
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionCyberArk @_sessionAttributes
         }
@@ -168,6 +171,7 @@ function Get-SessionToken
                 FullURI = $_fullURL
                 Credential = $Credential
                 Body = $_authBody
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionWindows @_sessionAttributes
         }
@@ -178,6 +182,7 @@ function Get-SessionToken
                 FullURI = $_fullURL
                 Credential = $Credential
                 Body = $_authBody
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionLDAP @_sessionAttributes
         }
@@ -189,6 +194,7 @@ function Get-SessionToken
                 Credential = $Credential
                 Body = $_authBody
                 Headers = $_authHeaders
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionSAML @_sessionAttributes
         }
@@ -200,6 +206,7 @@ function Get-SessionToken
                 Credential = $Credential
                 Body = $_authBody
                 Headers = $_authHeaders
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionRADIUS @_sessionAttributes
         }
@@ -211,6 +218,7 @@ function Get-SessionToken
                 Credential = $Credential
                 Body = $_authBody
                 Headers = $_authHeaders
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionShared @_sessionAttributes
         }
@@ -221,6 +229,7 @@ function Get-SessionToken
                 FullURI = $_fullURL
                 Credential = $Credential
                 Body = $_authBody
+                IgnoreSSL = $IgnoreSSL
             }
             $sessionToken = Get-AuthSessionPKIPN @_sessionAttributes
         }
@@ -270,7 +279,12 @@ function Get-AuthSessionCyberArk
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Headers
+        [hashtable] $Headers,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 
     # Set the success codes.
@@ -287,6 +301,7 @@ function Get-AuthSessionCyberArk
         Body = $Body
         ContentType = "application/json"
         SessionVariable = 'requestSession'
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -359,7 +374,12 @@ function Get-AuthSessionWindows
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Body
+        [hashtable] $Body,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 }
 function Get-AuthSessionLDAP
@@ -399,7 +419,12 @@ function Get-AuthSessionLDAP
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Body
+        [hashtable] $Body,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 
     # Set the success codes.
@@ -416,6 +441,7 @@ function Get-AuthSessionLDAP
         Body = $Body
         ContentType = "application/json"
         SessionVariable = 'requestSession'
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -478,7 +504,12 @@ function Get-AuthSessionSAML
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Body
+        [hashtable] $Body,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 
     # Get IDP URL
@@ -524,7 +555,12 @@ function Get-AuthSessionRADIUS
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Body
+        [hashtable] $Body,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
     # Set the success codes.
     $_successCodes = (200)
@@ -540,6 +576,7 @@ function Get-AuthSessionRADIUS
         Body = $Body
         ContentType = "application/json"
         SessionVariable = 'requestSession'
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -602,7 +639,12 @@ function Get-AuthSessionShared
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [pscredential] $Credential
+        [pscredential] $Credential,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 }
 function Get-AuthSessionPKIPN
@@ -639,7 +681,12 @@ function Get-AuthSessionPKIPN
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [hashtable] $Body
+        [hashtable] $Body,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
 
     # Get the username from the credential
@@ -677,6 +724,7 @@ function Get-AuthSessionPKIPN
         }
         SessionVariable = 'requestSession'
         Certificate = $selectedClientCertificate
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -752,7 +800,12 @@ function Clear-SessionToken
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string] $SessionToken
+        [string] $SessionToken,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
 
     )
 
@@ -789,6 +842,7 @@ function Clear-SessionToken
         URI = $_fullURL
         Method = "Post"
         ContentType = "application/json"
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -821,7 +875,12 @@ function Get-VaultName
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string] $SessionToken
+        [string] $SessionToken,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
     #https://<IIS_Server_Ip>/PasswordVault/WebServices/PIMServices.svc/Server
     $_stubPath = "WebServices/PIMServices.svc/Server"
@@ -849,6 +908,7 @@ function Get-VaultName
         Method = "Get"
         ContentType = "application/json"
         Headers = $_headers
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -897,7 +957,12 @@ function Get-VaultInfo
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string] $SessionToken
+        [string] $SessionToken,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
     #https://<IIS_Server_Ip>/PasswordVault/WebServices/PIMServices.svc/Verify
     $_stubPath = "WebServices/PIMServices.svc/Verify"
@@ -925,6 +990,7 @@ function Get-VaultInfo
         Method = "Get"
         ContentType = "application/json"
         Headers = $_headers
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters
@@ -975,7 +1041,12 @@ function Get-HealthSummary
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string] $SessionToken
+        [string] $SessionToken,
+
+        [parameter(
+            Mandatory = $false
+        )]
+        [bool] $IgnoreSSL = $false
     )
     #https://<IIS_Server_Ip>/PasswordVault/api/ComponentsMonitoringSummary
     $_stubPath = "api/ComponentsMonitoringSummary"
@@ -1003,6 +1074,7 @@ function Get-HealthSummary
         Method = "Get"
         ContentType = "application/json"
         Headers = $_headers
+        SkipCertificateCheck = $IgnoreSSL
     }
     # Make the request
     $result = Invoke-CustomWebRequest @_requestParameters

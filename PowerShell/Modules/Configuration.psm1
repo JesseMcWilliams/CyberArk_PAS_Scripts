@@ -16,6 +16,7 @@ function Read-Configuration
     # Create the base XML object.
     $_ConfigXML = New-Object -TypeName xml
 
+    # Need to test the path to see if it is relative or fully qualified.
     # Load the file.
     $_ConfigXML.Load((Convert-Path $Path))
 
