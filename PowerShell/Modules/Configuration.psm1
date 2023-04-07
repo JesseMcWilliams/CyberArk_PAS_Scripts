@@ -16,9 +16,32 @@ function Read-Configuration
     # Create the base XML object.
     $_ConfigXML = New-Object -TypeName xml
 
+    # Creat the fully qualified path.
+    $fullyQualifiedPath = ""
+
     # Need to test the path to see if it is relative or fully qualified.
+    if ($Path.Contains(":"))
+    {
+        # Fully Qualified Path.
+        $fullyQualifiedPath = Resolve-Path $Path
+    }
+    else
+    {
+        # Not a Fully Qualified Path.  Check to see if it starts with a period.
+        if ($Path.Substring(0,1).Equals("\"))
+        {
+            # Add a period to the path so that Resolve-Path can get the fully qualified path from this.
+            $fullyQualifiedPath = Resolve-Path ((".{0}" -f $Path))
+        }
+        else
+        {
+            # Resolve-Path can get the fully qualified path from this.
+            $fullyQualifiedPath = Resolve-Path $Path
+        }
+    }
+
     # Load the file.
-    $_ConfigXML.Load((Convert-Path $Path))
+    $_ConfigXML.Load($fullyQualifiedPath)
 
     return $_ConfigXML
 }
@@ -59,10 +82,10 @@ function Show-Configuration
             if ($element.HasChildNodes)
             {
                 # Get Child Nodes from the Element.
-                $configChildren = Get-ChildNodes -Nodes $element.ChildNodes -ParentName $_topLevelName
+                $configChildren = Get-ChildNodes -Nodes $element.ChildNodes -ParentName $_topLevelName -ForceParentName $true
 
                 # Add the returned dictionary to the current dictionary to be returned.
-                $_returnDictionary += $configChildren
+                $_returnDictionary[$_topLevelName] = $configChildren
             }
         }
         elseif ($element.NodeType -eq "Text")
@@ -72,19 +95,10 @@ function Show-Configuration
         }
     }
 
-    # Sort the results before returning the data.
-    #  Create the dictionary to hold the sorted attributes.
-    $_sortedDic = [ordered]@{}
+    # Flatten and Order the Hash Table.
+    $_flatOrderDictionary = ConvertTo-FlatHashTable -InputObject $_returnDictionary
 
-    # Loop over the sorted results and add to the return dictionary.
-    foreach ($sortedEntry in $($_returnDictionary.GetEnumerator() | Sort-Object -Property key))
-    {
-        # Add the values to the new dictionary.
-        $_sortedDic[$sortedEntry.Key] = $sortedEntry.Value
-    }
-
-    # Return the sorted dictionary.
-    return $_sortedDic
+    return $_flatOrderDictionary
 }
 function Get-ChildNodes
 {
@@ -97,10 +111,16 @@ function Get-ChildNodes
         [object] $Nodes,
 
         [parameter(
-            Mandatory = $true,
+            Mandatory = $false,
             ValueFromPipeline = $true
         )]
-        [string] $ParentName
+        [string] $ParentName,
+
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+        )]
+        [bool] $ForceParentName = $false
     )
 
     # Build the return dictionary.
@@ -112,29 +132,55 @@ function Get-ChildNodes
         # Check to see if the current item in the provided Nodes is an Element.
         if ($element.NodeType -eq "Element")
         {
-            # Build the Element Name to be used as the Key in the returned dictionary.
-            $_elementName = ("{0}.{1}" -f $ParentName, $element.Name)
+            if ($ForceParentName)
+            {
+                if ($ParentName -ne "")
+                {
+                    #$_elementName = ("{0}.{1}" -f $ParentName, $element.Name)
+                    $_elementName = $element.Name
+                }
+                else
+                {
+                    $_elementName = $element.Name
+                }
+            }
+            else
+            {
+                $_elementName = $element.Name
+            }
+            
 
             # Check to see if the current item has Child Nodes.
             if ($element.HasChildNodes)
             {
                 # Get Child Nodes
-                $configChildren = Get-ChildNodes -Nodes $element.ChildNodes -ParentName $_elementName
+                $configChildren = Get-ChildNodes -Nodes $element.ChildNodes -ParentName $_elementName -ForceParentName $ForceParentName
 
                 # Add the dictionaries.
-                $_returnDictionary += $configChildren
+                $_returnDictionary[$_elementName] = $configChildren
             }
         }
         # Check to see if the current item is Text.
         elseif ($element.NodeType -eq "Text")
         {
             # Add element to the return dictionary
-            $_returnDictionary[$ParentName] = $element.Data
+            return $element.Data
         }
     }
 
     # Return the dictionary.
-    return $_returnDictionary
+    if ($ForceParentName)
+    {
+        return $_returnDictionary
+    }
+    if ($_returnDictionary.ContainsKey($ParentName))
+    {
+        return $_returnDictionary[$ParentName]
+    }
+    else
+    {
+        return $_returnDictionary
+    }
 }
 function Set-Logging
 {
@@ -304,4 +350,71 @@ function Test-Configuration
 
     # Convert the sorted and ordered dictionary to a string to output.
     return ($allConfigurationItemsSorted | Format-Table -AutoSize | Out-String -Width 1024)
+}
+function ConvertTo-FlatHashTable
+{
+    [cmdletbinding()]
+    Param(
+        [parameter(
+            Mandatory = $true,
+            ValueFromPipeline = $true
+        )]
+        [hashtable] $InputObject,
+
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+        )]
+        [string] $ParentName
+    )
+    # Flatten a nested Hash Table
+    # Build the return dictionary.
+    $_returnDictionary = @{}
+
+    # Loop over the hashtable.
+    foreach ($element in $InputObject.Keys)
+    {
+        # Build the Element Name to be used as the Key in the returned dictionary.
+        if ($ParentName -ne "")
+        {
+            $_elementName = ("{0}.{1}" -f $ParentName, $element)
+        }
+        else
+        {
+            $_elementName = $element
+        }
+
+        # Get the Element Value.
+        $_elementValue = $InputObject[$element]
+
+        # Check to see if Value is another table.
+        if ($_elementValue.GetType() -eq [System.String])
+        {
+            # Add the dictionaries.
+            $_returnDictionary[$_elementName] = $_elementValue
+        }
+        elseif ($_elementValue.GetType() -eq [System.Collections.Hashtable])
+        {
+            # Nested Hash Table
+            $_returnDictionary += ConvertTo-FlatHashTable -InputObject $_elementValue -ParentName $_elementName
+        }
+        else
+        {
+            Write-Warning ("Unknown Value Type!  Element Name ({0}) : Value ({1}) : Type ({2})" -f $element, $_elementValue, $_elementValue.GetType())
+        }
+    }
+
+    # Sort the results before returning the data.
+    #  Create the dictionary to hold the sorted attributes.
+    $_sortedDic = [ordered]@{}
+
+    # Loop over the sorted results and add to the return dictionary.
+    foreach ($sortedEntry in $($_returnDictionary.GetEnumerator() | Sort-Object -Property key))
+    {
+        # Add the values to the new dictionary.
+        $_sortedDic[$sortedEntry.Key] = $sortedEntry.Value
+    }
+
+    # Return the sorted dictionary.
+    return $_sortedDic
 }

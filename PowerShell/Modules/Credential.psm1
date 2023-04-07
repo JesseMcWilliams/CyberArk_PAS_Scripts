@@ -17,7 +17,7 @@ function New-CredentialRequest
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [System.Xml.XmlElement] $PVWAAuthentication,
+        [System.Xml.XmlElement] $Authentication,
 
         [parameter(
             Mandatory = $true,
@@ -30,13 +30,13 @@ function New-CredentialRequest
     $_reqMethodAttribName = ("Method{0}" -f $Stage)
 
     # Get the requested authentication method.
-    $_reqAuthMethodName = $PVWAAuthentication.$_reqMethodAttribName
+    $_reqAuthMethodName = $Authentication.$_reqMethodAttribName
 
     # Set the attribute name for the requested authentication source.  Add the stage number.
     $_reqSourceAttribName = ("Source{0}" -f $Stage)
 
     # Get the requested authentication source.
-    $_reqAuthSourceName = $PVWAAuthentication.$_reqSourceAttribName
+    $_reqAuthSourceName = $Authentication.$_reqSourceAttribName
 
     # Build the request body object.
     $_reqBody = @{}
@@ -56,6 +56,16 @@ function New-CredentialRequest
             }
         }
         "LocalFile"
+        {
+            # Add the required attributes to the request body.
+            $_reqBody["Method"] = $_reqAuthMethodName
+            $_reqBody["Source"] = $_reqAuthSourceName
+            $_reqBody["Query"] = @{
+                Path = $AuthSourceAttributes.FilePath
+                Attributes = ""
+            }
+        }
+        "CredFile"
         {
             # Add the required attributes to the request body.
             $_reqBody["Method"] = $_reqAuthMethodName
@@ -153,6 +163,7 @@ $_authorizedCredentialSources = @{
     CCP         = "A request to the Central Credential Provider will be made."
     RESTAPI     = "A request to the PVWA Management REST API will be made."
     LocalFile   = "A local file with encrypted data will be read."
+    CredFile    = "A local file created with the CyberArk CreateCredFile utility."
     PKI         = "A local Certificate with Client Authentication and Private Key will be used."
 }
 function Get-SessionCredential
@@ -269,6 +280,18 @@ function Get-SessionCredential
             Write-Debug ("{0} | Getting Credential From ({1}) | Using Attributes `r`n`t{2}" -f $(Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $Source, ($_functionProperties | ConvertTo-Json).Replace("`n", "`n`t"))
 
             $sessionCredential = Get-CredentialFile @_functionProperties
+        }
+
+        "CredFile"
+        {
+            # Function Properties
+            $_functionProperties = @{
+                FileLocation = $Query["Path"]
+            }
+
+            Write-Debug ("{0} | Getting Credential From ({1}) | Using Attributes `r`n`t{2}" -f $(Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $Source, ($_functionProperties | ConvertTo-Json).Replace("`n", "`n`t"))
+
+            $sessionCredential = Get-CyberArkCredFile @_functionProperties
         }
 
         "PKI"
@@ -476,6 +499,49 @@ function Get-CredentialFile
 
         # Retrieve the password which should be the second line.
         $_password = ConvertTo-SecureString $_credentialFile[1]
+
+        # Create the PowerShell Credential object and return.
+        return New-Object System.Management.Automation.PSCredential ($_username, $_password)
+    }
+    catch
+    {
+        # Grab the current error object
+        $_currentException = $PSItem
+
+        Write-Warning ("{0} | Failure with File:  {1}" -f $(Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $FileLocation)
+
+        # Return a bad Credential
+        return [System.Management.Automation.PSCredential]::Empty
+    }
+
+}
+function Get-CyberArkCredFile
+{
+    [cmdletbinding()]
+    Param(
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+        )]
+        [string] $FileLocation
+    )
+
+    <#
+        The local CyberArk Credential file is created by running the CreateCredFile.exe utility.
+        
+    #>
+
+    # Use a try catch.
+    try
+    {
+        # Read the specified file.
+        $_credentialFile = Get-Content -Path $FileLocation
+
+        # Decrypt the username which should be the first line.
+        $_username = "CyberArkCredFile"
+
+        # Retrieve the password which should be the second line.
+        $_password = ConvertTo-SecureString -String $FileLocation -AsPlainText -Force
 
         # Create the PowerShell Credential object and return.
         return New-Object System.Management.Automation.PSCredential ($_username, $_password)
