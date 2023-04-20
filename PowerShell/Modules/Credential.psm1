@@ -537,8 +537,22 @@ function Get-CyberArkCredFile
         # Read the specified file.
         $_credentialFile = Get-Content -Path $FileLocation
 
-        # Decrypt the username which should be the first line.
-        $_username = "CyberArkCredFile"
+        # Get the username from the credential file.
+        $_labelUserName = "Username"
+
+        # Read the file to get the username.
+        $_credFileContent = Get-Content -Path $FileLocation
+
+        # Loop over the content looking for the username label.
+        foreach ($line in $_credFileContent)
+        {
+            if ($line.Contains($_labelUserName))
+            {
+                # Split the line.
+                $_line = $line.Split("=")
+                $_username = $_line[1]
+            }
+        }
 
         # Retrieve the password which should be the second line.
         $_password = ConvertTo-SecureString -String $FileLocation -AsPlainText -Force

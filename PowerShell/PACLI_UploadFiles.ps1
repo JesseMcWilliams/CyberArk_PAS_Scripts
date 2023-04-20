@@ -8,6 +8,7 @@
 
 # Setup any Using statements.
 Using Module Logger
+Using Module ".\Modules\PACLI\PACLI.psm1"
 
 # Specify the input parameters.
 [cmdletbinding()]
@@ -42,6 +43,7 @@ Using Module Logger
 Import-Module ".\Modules\Configuration.psm1" -Force
 Import-Module ".\Modules\Credential.psm1" -Force
 Import-Module ".\Modules\PS_Script_Utilities.psm1" -Force
+Import-Module ".\Modules\CyberArk_PACLI.psm1" -Force
 
 #region PowerShell Debug/Verbose output
 # Valid settings:  SilentlyContinue, Continue,
@@ -159,6 +161,7 @@ foreach ($action in $_Actions.Keys)
     $Logger.Write(("   File Name  :  {0}" -f $_Actions[$action]["Filename"]), "Debug")
     $Logger.Write(("     Max Age  :  {0}" -f $_Actions[$action]["MaxAge"]), "Debug")
     $Logger.Write(("       Depth  :  {0}" -f $_Actions[$action]["Depth"]), "Debug")
+    $Logger.Write(("   Overwrite  :  {0}" -f $_Actions[$action]["Overwrite"]), "Debug")
     $Logger.Write((" Found Files  :  `r`n`t{0}" -f ($_Actions[$action]["Files"] -join "`r`n`t")), "Debug")
 }
 Write-Host "Moving On"
@@ -172,16 +175,35 @@ $_newSessionCredRequest = @{
 $_newSessionRequest = New-CredentialRequest @_newSessionCredRequest
 
 # Get the first session credential.
-
 $_sessionCredential = Get-SessionCredential @_newSessionRequest
+
+# Create the Destination object.
+$_PACLI = [PACLI]::New()
+
 
 # Logon to the Vault.
 Write-Host ("  Name  :  {0}" -f $_sessionCredential["Credential"].Username)
 Write-Host ("Password:  {0}" -f $_sessionCredential["Credential"].GetNetworkCredential().Password)
+$_pacliConnection = @{
+    Path = $_Configuration.PACLIInformation.FilePath
+    SessionID = $_Configuration.PACLIInformation.SessionID
+    Name = $_Configuration.PACLIInformation.Name
+    Address = $_Configuration.PACLIInformation.Address
+    Port = $_Configuration.PACLIInformation.Port
+    User = $_sessionCredential["Credential"].Username
+}
+$connectResult = Connect-PACLI @_pacliConnection
 
 # Upload the files to the Vault.
 
 # Logoff the Vault.
+$_pacliDisconnect = @{
+    Name = $_Configuration.PACLIInformation.Name
+    User = $_sessionCredential["Credential"].Username
+}
+$disconnectResult = Disconnect-PACLI @_pacliDisconnect
+
+Remove-Module PACLI
 
 $Logger.Write(("******************** {0} ********************" -f "Finished"), "Information")
 #endregion Script Flow
