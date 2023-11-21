@@ -77,7 +77,7 @@ $idpBody = @{
 }
 
 $logonURL = $PVWAURL + "/PasswordVault/API/auth/saml/logon"
-# The url is case sensitive after API.
+# The url is case sensitive after API, sometimes.
 
 # Build the web request options.
 $idpWebRequestOptions = @{
@@ -208,7 +208,7 @@ foreach ($acctKey in $Accounts.Keys)
         $filter = ("safename eq {0}" -f $_sourceVault)
         $search = ("{0}" -f $_sourceName)
 
-        # Only using the filter here.  The API search is limited.
+        # Only using the filter here.  The API search is limited.  Spaces work in the URL for this.
         $faURL = $PVWAURL + "/PasswordVault/API/Accounts?filter=$($filter)"
 
         # Build the web request options.
@@ -285,7 +285,8 @@ foreach ($acctKey in $Accounts.Keys)
         }
 
         $rpBody = @{
-            #
+            #  Even though this is a POST the body should be blank.
+            #  If a reason is required you will need to use the body.
         }
 
         # Pull the account ID from the found accounts.
