@@ -1,0 +1,12 @@
+﻿SafeName,Username,Domain,Action,Role
+Test_Safe,Test01,,Remove,RG_Full_Admin
+Test_Safe,Test02,,Remove,RG_Limited_Admin
+Test_Safe,Test03,,Remove,RG_Restricted_Admin
+Test_Safe,Test04,,Remove,RG_Safe_Manager
+Test_Safe,Test05,,Remove,RG_Safe_Manager_AR
+Test_Safe,Test06,,Remove,RG_Safe_Approver_1
+Test_Safe,Test07,,Remove,RG_Safe_Approver_2
+Test_Safe,Test08,,Remove,RG_Safe_User_UO
+Test_Safe,Test09,,Remove,RG_Safe_User_SO
+Test_Safe,Test10,,Remove,RG_Safe_User
+Test_Safe,Test11,,Remove,RG_Auditor

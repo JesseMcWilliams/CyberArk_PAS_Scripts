@@ -1,0 +1,47 @@
+Create a new safe to hold the permission roles.
+Safe Name:  Z_Template_Safe_Permissions
+Description:  This safe holds the default configuration and permission roles.
+Save previous xx password versions
+
+Create a new location in root using PrivateArk Client.  Name:  Role_Groups
+
+In the Role_Groups location create groups for each Role that you have.  The group name should start with RG_
+EX:
+	RG_Full_Admin
+		All safe permissions.
+	RG_Limited_Admin
+		All safe permissions.  Excluding Use, Show, Specify Next Password.
+	RG_Restricted_Admin
+		All safe permissions.  Excluding
+	RG_Safe_Manager
+		?
+	RG_Safe_Manager_AR
+		Same as safe manager with approval permissions.
+	RG_Safe_Approver_1
+		Same as safe manager with level 1 approval permissions.
+	RG_Safe_Approver_2
+		Same as safe manager with level 2 approval permissions.
+	RG_Safe_User_UO
+		List and Use.  No Show.
+	RG_Safe_User_RO
+		List and Retrieve.  No Use.
+	RG_Safe_User
+		List, Use, and Show permissions.
+	RG_Auditor
+		List, View Owners, View Activities
+
+The role names will be used in the CSV input file.
+
+Create an input CSV file.
+Headers:
+SafeName, Username, Domain, Action, Role
+My Safe, My Group, MyDomain, Add, RG_Full_Admin
+
+Valid Actions:
+	Add
+		Add a new safe owner with the permissions specified in the role.
+	Update
+		Update an existing safe owner with the permissions specifed in the role.
+		Permissions not in the role will be removed.
+	Remove
+		Remove the user from safe ownership.  All permissions removed.

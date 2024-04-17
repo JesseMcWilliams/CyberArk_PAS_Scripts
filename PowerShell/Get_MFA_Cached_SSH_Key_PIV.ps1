@@ -83,7 +83,6 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-            [ValidateSet('PEM','PPK','OpenSSH')]
         [int] $RequestTimeout = 30,
 
         [Parameter(

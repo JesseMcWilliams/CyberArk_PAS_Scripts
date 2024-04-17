@@ -9,19 +9,31 @@
     This script requires PowerShell 5.1 or higher.
     
     .PARAMETER PVWAURL
-    [string]: This is the base URL of the PVWA web server.
+    [string]: This is the base URL of the PVWA web server.  https://epv.company.com
 
-    .INPUTS 
-    [string] CyberArk Password Vault Web Access URL.
-    [string] The authentication method to be used.
-    [pscredential] The credential to be authenticated with.
-    [string] The output folder path, Relative or Fully Qualified.
+    .PARAMETER AuthMethod
+    [string]:  This can be one of the following:  CyberArk, LDAP, SAML, PKI, or PKIPN
+
+    .PARAMETER Credential
+    [pscredential]:  This is a PowerShell credential object.  Needed for CyberArk and LDAP authentication.
+
+    .PARAMETER Thumbprint
+    [string]:  This is the User's X509 Client Authentication certificates thumbprint.  Needed for PKI or PKIPN authentication.
+
+    .PARAMETER RequestTimeout
+    [int]:  This is the time in seconds that each request can take before timing out.
+    
+    .PARAMETER IISAppName
+    [string]:  This is the name of the IIS application.  Normally PasswordVault.
+    
+    .PARAMETER SkipCertificateCheck
+    [switch]:  This will skip the validation of the remote server's certificate.
 
     .OUTPUTS
-    None
+    Output can be sent to standard out or to a file.
 
     .NOTES
-    This script leverages the work of the following people.
+    This script leverages the work of the following people and more.
         https://github.com/allynl93
         https://github.com/infamousjoeg
         https://github.com/pspete
@@ -45,9 +57,8 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-            #[ValidateSet('CyberArk','LDAP','SAML','PKI','PKIPN')]
-            #[ValidateScript({if ($AUTHURLS.Keys.ToLower().Contains($_)){$true}})]
-        [string] $AuthMethod = "SAML",
+            [ValidateSet('CyberArk','LDAP','SAML','PKI','PKIPN')]
+        [string] $AuthMethod,
     
         [Parameter(
             Mandatory = $false,
@@ -60,7 +71,6 @@
             ValueFromPipeline = $true
             )]
         [string] $ThumbPrint,
-        # = "61c2808e62b8b62784b4650e3f14112e29485842",  My YubiKey Cert
 
         [Parameter(
             Mandatory = $false,
@@ -100,9 +110,97 @@ $AUTHURLS = @{
     "LogOff" = "/API/auth/logoff"
 }
 # Safe
-# Account
+$SAFEURLS = @{
+    "AddSafe" = "/API/Safes/"
+    "UpdateSafe" = "/API/Safes/{SafeUrlId}/"
+    "DeleteSafe" = "/API/Safes/{safeUrlId}/"
+    "SearchSafe" = "/WebServices/PIMServices.svc/Safes?query={Query}/"
+    "GetAllSafes" = "/API/Safes/"
+    "GetSafeDetails" = "/API/Safes/{SafeUrlId}/"
+    "GetSafeByPlatform" = "/API/Platforms/{PlatformID}/Safes/"
+}
+# Safe Members
+$SAFEMEMBERSURLS = @{
+    "AddSafeMember" = "/API/Safes/{safeUrlId}/Members/"
+    "UpdateSafeMember" = "/API/Safes/{SafeUrlId}/Members/{MemberName}/"
+    "DeleteSafeMember" = "/API/Safes/{SafeUrlId}/Members/{MemberName}/"
+    "GetSafeMember" = "/API/Safes/{SafeUrlId}/Members/{MemberName}/"
+    "GetAllSafeMembers" = "/API/Safes/{SafeUrlId}/Members/"
+}
+# Accounts
+$ACCOUNTSURLS = @{
+    "GetAccounts" = "/API/Accounts?search={search}&searchType={searchType}&sort={sort}&offset={offset}&limit={limit}&filter={filter}/"
+    "GetAccountDetails" = "/API/Accounts/{id}/"
+    "GetAccountActivity" = "/WebServices/PIMServices.svc/Accounts/{AccountID}/Activities/"
+    "GetSecretVersions" = "/API/Accounts/<AccountID>/Secret/Versions/"
+    "AddAccount" = "/api/Accounts"
+    "UpdateAccount" = "/API/Accounts/{AccountID}/"
+    "DeleteAccount" = "/API/Accounts/{id}/"
+}
+$ACCOUNTACTIONSURLS = @{
+    "GetJustInTimeAccess" = "/api/Accounts/{accountId}/grantAdministrativeAccess/"
+    "RevokeJustInTimeAccess" = "/api/Accounts/{accountId}/RevokeAdministrativeAccess/"
+    "UnlockAccount" = "/API/Accounts/<AccountID>/Unlock/"
+    "ConnectUsingPSM" = "/API/Accounts/{accountId}/PSMConnect/"
+    "AdHocConnectUsingPSM" = "/API/Accounts/AdHocConnect/"
+    "GetPasswordValue" = "/API/Accounts/{accountId}/Password/Retrieve/"
+    "GeneratePassword" = "/API/Accounts/<AccountID>/Secret/Generate/"
+    "RetrievePrivateSSHKeyAccount" = "/API/Accounts/{accountId}/Secret/Retrieve/"
+    "CheckInExclusiveAccount" = "/API/Accounts/<AccountID>/CheckIn/"
+    "VerifyCredentials" = "/API/Accounts/<AccountID>/Verify/"
+    "ChangeCredentialsImmediately" = "/API/Accounts/<AccountID>/Change/"
+    "ChangeCredentialsSetNextPassword" = "/API/Accounts/<AccountID>/SetNextPassword/"
+    "ChangeCredentialsInTheVault" = "/API/Accounts/<AccountID>/Password/Update/"
+    "ReceoncileCredentials" = "/API/Accounts/<AccountID>/Reconcile/"
+}
+$LINKEDACCOUNTSURLS = @{
+    "LinkAnAccount" = "/API/Accounts/{accountId}/LinkAccount/"
+    "UnlinkAnAccount" = "/API/Accounts/{accountId}/LinkAccount/{extraPasswordIndex}/"
+}
+$DISCOVEREDACCOUNTSURLS = @{
+    "AddDiscoveredAccounts" = "/API/DiscoveredAccounts/"
+    "GetDiscoveredAccounts" = "/API/DiscoveredAccounts/"
+    "GetDiscoveredAccountDetails" = "/API/DiscoveredAccounts/{id}/"
+    "DeleteDiscoveredAccounts" = "/API/DiscoveredAccounts/"
+}
 # User
+$USERSURLS = @{
+    "GetUsers" = "/API/Users/"
+    "GetUserTypes" = "/API/UserTypes/"
+    "GetUserDetails" = "/API/Users/{UserID}/"
+    "GetLoggedOnUserDetails" = "/WebServices/PIMServices.svc/User/"
+    "AddUser" = "/API/Users/"
+    "UpdateUser" = "/API/Users/{userID}/"
+    "DeleteUser" = "/API/Users/{UserID}/"
+    "ActivateUser" = "/API/Users/{UserID}/Activate/"
+    "EnableUser" = "/API/Users/{UserID}/enable/"
+    "DisableUser" = "/API/Users/{UserID}/disable/"
+    "ResetUserPassword" = "/API/Users/{UserID}/ResetPassword/"
+}
 # Group
+$GROUPSURLS = @{
+    "GetGroups" = "/API/UserGroups/"
+    "GetGroupDetails" = "/API/UserGroups/{ID}/"
+    "CreateGroup" = "/API/UserGroups/"
+    "UpdateGroup" = "/API/UserGroups/{groupId}/"
+    "DeleteGroup" = "/API/UserGroups/{GroupID}/"
+    "AddMemberToGroup" = "/API/UserGroups/{id}/Members/"
+    "RemoveUserFromGroup" = "/API/UserGroups/{groupID}/Members/{member}/"
+}
+# SSH Keys
+$PUBLICSSHURLS = @{
+    "GetPublicSSHKeys" = "/WebServices/PIMServices.svc/Users/{UserName}/AuthenticationMethods/SSHKeyAuthentication/AuthorizedKeys/"
+    "AddPublicSSHKey" = "/WebServices/PIMServices.svc/Users/{UserName}/AuthenticationMethods/SSHKeyAuthentication/AuthorizedKeys/"
+    "DeletePublicSSHKey" = "/WebServices/PIMServices.svc/Users/{UserName}/AuthenticationMethods/SSHKeyAuthentication/AuthorizedKeys/{KeyID}/"
+}
+
+$PRIVATESSHURLS = @{
+    "GenerateMFACaching" = "/API/Users/Secret/SSHKeys/Cache/"
+    "GenerateMFACachingAnotherUser" = "/API/Users/{userID}/Secret/SSHKeys/Cache/"
+    "DeleteMFACaching" = "/API/Users/Secret/SSHKeys/Cache/"
+    "DeleteMFACachingAnotherUser" = "/API/Users/{userID}/Secret/SSHKeys/Cache/"
+    "DeleteAllMFACaching" = "/API/Users/Secret/SSHKeys/ClearCache/"
+}
 
 #endRegion URLs
 
@@ -1284,6 +1382,7 @@ function Test-AuthMethodReq
         {
             # Not Null.  Assume it is valid.
             $_returnResult.Valid = $true
+            $_returnResult.Value = $Credential
         }
         else
         {
@@ -1294,6 +1393,7 @@ function Test-AuthMethodReq
             if (($_returnResult.Value) -and ($_returnResult.Value.Username -ne ""))
             {
                 $_returnResult.Valid = $true
+                $_returnResult.Value = Get-Credential
             }
         }
     }
