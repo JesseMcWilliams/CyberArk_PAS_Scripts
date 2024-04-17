@@ -124,7 +124,7 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $Query = "Safe=PRS-TX-JMCWILLIAMS;Folder=Root;Object=nvidia.com-T1jmcwilliams"
+        [string] $Query = "Safe=MySafe;Folder=Root;Object=MyAccount"
     )
 
 # Enable Verbose Logging :  
