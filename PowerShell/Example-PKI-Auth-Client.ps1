@@ -4,7 +4,7 @@
 
 Import-Module pspas -Force -MinimumVersion 6.0.30
 
-$PVWAURL = 'https://epv.nvidia.com'
+$PVWAURL = 'https://epv.company.com'
 
 #$AllMyCertificates = Get-ChildItem Cert:\CurrentUser\My
 

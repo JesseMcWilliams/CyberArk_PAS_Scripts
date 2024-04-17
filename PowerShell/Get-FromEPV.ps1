@@ -67,7 +67,7 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $PVWAURL = "https://epv.nvidia.com",
+        [string] $PVWAURL = "https://epv.company.com",
 
         [Parameter(
             Mandatory = $false,
