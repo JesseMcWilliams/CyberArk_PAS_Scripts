@@ -1,5 +1,6 @@
 <#
     .SYNOPSIS
+    Version: 0.4
     This script will create, modify, or delete the safes specified in the input file (csv).
     
     .DESCRIPTION
@@ -60,6 +61,9 @@
 
     .PARAMETER InputFiles
     [string[]]:  An array holding one or more file names.
+
+    .PARAMETER ConfiguredCPMs
+    [string[]]:  An array holding one or more component names for the CPM(s).
 
     .OUTPUTS
     Output can be sent to standard out or to a file.
@@ -132,7 +136,7 @@
             ValueFromPipeline = $true
             )]
         #[pscredential] $Credential = $MyCred,
-        [pscredential] $Credential = (New-Object System.Management.Automation.PSCredential ("CA_Admin", (ConvertTo-SecureString "Password22!" -AsPlainText -Force))),
+        [pscredential] $Credential = (New-Object System.Management.Automation.PSCredential ("CA_Onboarding", (ConvertTo-SecureString "Password22!" -AsPlainText -Force))),
 
         [Parameter(
             Mandatory = $false,
@@ -174,7 +178,13 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string[]] $InputFiles = @("C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\!Input_SafeAdd.csv")
+        [string[]] $InputFiles = @("C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\!Input_SafeAdd.csv"),
+
+        [Parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+            )]
+        [string[]] $ConfiguredCPMs = @("PasswordManager")
     )
 
 # Enable Verbose Logging :  
@@ -1775,6 +1785,7 @@ function Get-SamlResponseEXE
         Write-Warning $_
     }
 }
+
 #endregion Rest API Support Functions
 
 ##########################################################
@@ -3018,6 +3029,19 @@ function Update-Safe
     # Make the request.
     $_result = Invoke-PASRestMethod @_requestAttributes
 
+    Write-Host ("{0} : Result:  ******************** Result Start ********************`r`n{1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_result)
+    Write-Host ("{0} : Result:  ********************  Result End  ********************" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+
+    # Debug output if result is blank or null.
+    if (($null -eq $_result) -or ($_result -eq ""))
+    {
+        # The result is Null or Blank.
+        Write-Host ("{0} : Requested URL : {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_requestAttributes.URI)
+        Write-Host ("{0} : Request Method: {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_requestAttributes.Method)
+        Write-Host ("{0} : Result:  ******************** Body Start ********************`r`n{1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), ($_body | ConvertTo-Json))
+        Write-Host ("{0} : Result:  ********************  Body End  ********************" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+
+    }
     # Return the result
     return $_result
 }
@@ -4101,7 +4125,13 @@ function Read-SafeActions
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $AuthToken
+        [string] $AuthToken,
+
+        [Parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+            )]
+        [string] $OnboardingUser
     )
 
     # Create a variable to hold the template safe properties, and member permissions.
@@ -4145,6 +4175,14 @@ function Read-SafeActions
 
             # Try to get the safe from the PVWA.
             $_targetSafe = Get-AllSafes @_baseReqOptions
+
+            # Filter the safe names if more than one returned.
+            $_typeSafeObject = $_targetSafe.GetType()
+            if ($_targetSafe.GetType().FullName -eq "System.Object[]")
+            {
+                # Filter the results.
+                $_targetSafe = $_targetSafe | Where-Object -Property safeName -eq -Value $_line.SafeName
+            }
             
             # Perform Add or Update if the action is not Delete / Remove.
             if (($_line.Action -ine "Remove") -and ($_line.Action -ine "Delete"))
@@ -4169,7 +4207,7 @@ function Read-SafeActions
 
                     Write-Host ("{0} : Getting template safe owners." -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
                     # Make the call to get the safe members.
-                    $_templateSafeMembers = Get-AllSafeMembers @_requestAttributes -Filter @("memberType eq group", "includePredefinedUsers eq False")
+                    $_templateSafeMembers = Get-AllSafeMembers @_requestAttributes -Filter @("includePredefinedUsers eq False")
                     
                     # Filter the safe members to only include Role Groups.
                     $_templateSafeRoleMembers = $_templateSafeMembers | Where-Object {$_.memberName -ilike ("{0}*" -f $RoleNamePrefix)}
@@ -4179,6 +4217,12 @@ function Read-SafeActions
 
                     # Filter the safe members that belong to the PSM groups.
                     $_templateSafeNonRoleMembers = $_templateSafeNonRoleMembers | Where-Object {$_.memberName -inotlike "PSM*"}
+
+                    # Filter the safe members to remove configured CPMs.
+                    $_templateSafeNonRoleMembers = $_templateSafeNonRoleMembers | Where-Object {$ConfiguredCPMs -notcontains $_.memberName}
+
+                    # Remove the user being used for this onboarding.
+                    $_templateSafeNonRoleMembers = $_templateSafeNonRoleMembers | Where-Object {$_.memberName -inotlike $OnboardingUser}
 
                 }
 
@@ -4308,7 +4352,6 @@ function Read-SafeActions
                                 BaseURL = $BaseURL
                                 Token = $AuthToken
                                 SearchIn = "Vault"
-                                MemberType = "User"
                                 SafeUrlId = $_addSafeResult.SafeUrlId
                             }
                             # Append to the message action.
@@ -4318,7 +4361,7 @@ function Read-SafeActions
                             foreach ($_member in $_templateSafeNonRoleMembers)
                             {
                                 # Call Add Safe Member.
-                                $_addSafeMemberResult = Add-SafeMember @_baseAddSafeMember -MemberName $_member.MemberName  -Permissions $_member.Permissions
+                                $_addSafeMemberResult = Add-SafeMember @_baseAddSafeMember -MemberName $_member.MemberName -MemberType $_member.memberType  -Permissions $_member.Permissions
 
                                 # Check add safe member result.
                                 if ($_addSafeMemberResult)
@@ -4349,8 +4392,7 @@ function Read-SafeActions
                 elseif (($null -ne $_targetSafe) -and ($_line.Action -ieq "Update"))
                 {
                     # The safe does exist and we are being asked to update it.
-                    # The safe does not exist and we are being asked to add it.
-                    # Call the Add Safe function.
+                    Write-Host ("{0} : Requested Action ({1}) : Target Safe URL ID ({2})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_line.Action, $_targetSafe.SafeUrlId)
                     $_updateSafeResult = Update-Safe @_baseReqOptions -SafeURLID $_targetSafe.SafeUrlId
                     $_messageAction = "Update Safe"
 
@@ -4523,7 +4565,7 @@ else
 if (($null -ne $CyberArkAuthToken) -and ($CyberArkAuthToken -ne ""))
 {
     # Call the Safe Permissions Function
-    Read-SafeActions -BaseURL $_baseURL -Files $InputFiles -AuthToken $CyberArkAuthToken
+    Read-SafeActions -BaseURL $_baseURL -Files $InputFiles -AuthToken $CyberArkAuthToken -OnboardingUser $Credential.UserName
 }
 else
 {
