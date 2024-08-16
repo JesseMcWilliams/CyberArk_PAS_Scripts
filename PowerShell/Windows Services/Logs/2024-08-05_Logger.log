@@ -1,0 +1,1314 @@
+2024-05-08 05:04:25 | Information | **************************************************
+2024-05-08 05:04:25 |       Force | ******************** Starting ********************
+2024-05-08 05:04:25 | Information | **************************************************
+2024-05-08 05:04:26 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 05:04:26 |       Force | Current Logging Level:  Trace
+2024-05-08 05:04:26 | Information | Analyzing the input file(s).
+2024-05-08 05:04:26 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 05:04:26 | Information |     File Name Only   :  Input_File_01
+2024-05-08 05:04:26 | Information |     File Extension   :  .csv
+2024-05-08 05:04:26 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 05:04:26 | Information |          File Size   :  5,368.00KB
+2024-05-08 05:04:26 | Information |       Rows Imported  :  30
+2024-05-08 05:04:26 | Information | Total Rows Imported  :  30
+2024-05-08 05:04:26 | Information | Sorted & Unique Rows :  30
+2024-05-08 05:04:26 | Information | Admin Creds Needed   :  6
+2024-05-08 05:04:26 | Information | Service Creds Needed :  5
+2024-05-08 05:04:26 | Information | Authenticating to the PVWA.
+2024-05-08 05:04:26 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 05:04:26 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 05:04:29 |       Debug | Saving psPAS session.
+2024-05-08 05:04:29 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 05:04:29 | Information | Getting server admin Account(s).
+2024-05-08 05:04:29 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 05:04:30 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 05:04:31 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 05:04:31 | Information | Unlocked the Account.
+2024-05-08 05:04:31 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 05:04:31 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 05:04:31 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 05:04:31 | Information | Unlocked the Account.
+2024-05-08 05:04:31 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 05:04:32 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 05:04:32 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 05:04:32 | Information | Unlocked the Account.
+2024-05-08 05:04:32 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 05:04:32 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 05:04:32 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 05:04:33 | Information | Unlocked the Account.
+2024-05-08 05:04:33 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 05:04:33 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 05:04:33 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 05:04:33 | Information | Unlocked the Account.
+2024-05-08 05:04:33 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 05:04:34 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 05:04:34 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 05:04:34 | Information | Unlocked the Account.
+2024-05-08 05:04:34 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 05:04:35 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 05:04:35 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 05:04:35 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 05:04:36 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 05:04:36 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 05:04:37 | Information | Admin Credentials Retrieved (6).
+2024-05-08 05:05:04 | Information | Jobs Created. Count:  3
+2024-05-08 05:05:04 | Information | Submitting Jobs.
+2024-05-08 05:05:04 | Information | Submitted Jobs.  Waiting
+2024-05-08 05:05:04 | Information | Jobs Completed.
+2024-05-08 05:12:24 | Information | **************************************************
+2024-05-08 05:12:24 |       Force | ******************** Starting ********************
+2024-05-08 05:12:24 | Information | **************************************************
+2024-05-08 05:12:24 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 05:12:24 |       Force | Current Logging Level:  Trace
+2024-05-08 05:12:24 | Information | Analyzing the input file(s).
+2024-05-08 05:12:24 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 05:12:24 | Information |     File Name Only   :  Input_File_01
+2024-05-08 05:12:24 | Information |     File Extension   :  .csv
+2024-05-08 05:12:24 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 05:12:24 | Information |          File Size   :  5,368.00KB
+2024-05-08 05:12:24 | Information |       Rows Imported  :  30
+2024-05-08 05:12:24 | Information | Total Rows Imported  :  30
+2024-05-08 05:12:24 | Information | Sorted & Unique Rows :  30
+2024-05-08 05:12:24 | Information | Admin Creds Needed   :  6
+2024-05-08 05:12:24 | Information | Service Creds Needed :  5
+2024-05-08 05:12:24 | Information | Authenticating to the PVWA.
+2024-05-08 05:12:24 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 05:12:24 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 05:12:26 |       Debug | Saving psPAS session.
+2024-05-08 05:12:26 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 05:12:26 | Information | Getting server admin Account(s).
+2024-05-08 05:12:26 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 05:12:26 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 05:12:27 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 05:12:27 | Information | Unlocked the Account.
+2024-05-08 05:12:27 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 05:12:27 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 05:12:27 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 05:12:27 | Information | Unlocked the Account.
+2024-05-08 05:12:27 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 05:12:28 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 05:12:28 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 05:12:28 | Information | Unlocked the Account.
+2024-05-08 05:12:28 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 05:12:28 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 05:12:29 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 05:12:29 | Information | Unlocked the Account.
+2024-05-08 05:12:29 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 05:12:29 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 05:12:30 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 05:12:30 | Information | Unlocked the Account.
+2024-05-08 05:12:30 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 05:12:30 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 05:12:30 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 05:12:31 | Information | Unlocked the Account.
+2024-05-08 05:12:31 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 05:12:31 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 05:12:31 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 05:12:32 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 05:12:32 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 05:12:33 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 05:12:33 | Information | Admin Credentials Retrieved (6).
+2024-05-08 05:13:03 | Information | Jobs Created. Count:  3
+2024-05-08 05:13:03 | Information | Submitting Jobs.
+2024-05-08 05:13:03 | Information | Submitted Jobs.  Waiting
+2024-05-08 05:13:33 | Information | Jobs Completed.
+2024-05-08 05:51:44 | Information | **************************************************
+2024-05-08 05:51:44 |       Force | ******************** Starting ********************
+2024-05-08 05:51:44 | Information | **************************************************
+2024-05-08 05:51:44 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 05:51:44 |       Force | Current Logging Level:  Trace
+2024-05-08 05:51:44 | Information | Analyzing the input file(s).
+2024-05-08 05:51:44 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 05:51:44 | Information |     File Name Only   :  Input_File_01
+2024-05-08 05:51:44 | Information |     File Extension   :  .csv
+2024-05-08 05:51:44 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 05:51:44 | Information |          File Size   :  5,368.00KB
+2024-05-08 05:51:44 | Information |       Rows Imported  :  30
+2024-05-08 05:51:44 | Information | Total Rows Imported  :  30
+2024-05-08 05:51:44 | Information | Sorted & Unique Rows :  30
+2024-05-08 05:51:44 | Information | Admin Creds Needed   :  6
+2024-05-08 05:51:44 | Information | Service Creds Needed :  5
+2024-05-08 05:51:44 | Information | Authenticating to the PVWA.
+2024-05-08 05:51:44 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 05:51:44 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 05:51:45 |       Debug | Saving psPAS session.
+2024-05-08 05:51:45 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 05:51:45 | Information | Getting server admin Account(s).
+2024-05-08 05:51:45 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 05:51:46 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 05:51:46 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 05:51:46 | Information | Unlocked the Account.
+2024-05-08 05:51:46 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 05:51:47 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 05:51:47 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 05:51:47 | Information | Unlocked the Account.
+2024-05-08 05:51:47 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 05:51:47 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 05:51:47 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 05:51:48 | Information | Unlocked the Account.
+2024-05-08 05:51:48 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 05:51:48 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 05:51:48 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 05:51:48 | Information | Unlocked the Account.
+2024-05-08 05:51:48 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 05:51:49 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 05:51:49 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 05:51:49 | Information | Unlocked the Account.
+2024-05-08 05:51:49 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 05:51:49 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 05:51:49 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 05:51:50 | Information | Unlocked the Account.
+2024-05-08 05:51:50 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 05:51:50 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 05:51:51 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 05:51:51 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 05:51:52 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 05:51:52 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 05:51:53 | Information | Admin Credentials Retrieved (6).
+2024-05-08 05:52:01 | Information | Jobs Created. Count:  3
+2024-05-08 05:52:01 | Information | Submitting Jobs.
+2024-05-08 05:52:01 | Information | Submitted Jobs.  Waiting
+2024-05-08 05:52:01 | Information | Jobs Completed.
+2024-05-08 06:03:08 | Information | **************************************************
+2024-05-08 06:03:08 |       Force | ******************** Starting ********************
+2024-05-08 06:03:08 | Information | **************************************************
+2024-05-08 06:03:08 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:03:08 |       Force | Current Logging Level:  Trace
+2024-05-08 06:03:08 | Information | Analyzing the input file(s).
+2024-05-08 06:03:08 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:03:08 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:03:08 | Information |     File Extension   :  .csv
+2024-05-08 06:03:08 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:03:08 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:03:08 | Information |       Rows Imported  :  30
+2024-05-08 06:03:08 | Information | Total Rows Imported  :  30
+2024-05-08 06:03:08 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:03:08 | Information | Admin Creds Needed   :  6
+2024-05-08 06:03:08 | Information | Service Creds Needed :  5
+2024-05-08 06:03:08 | Information | Authenticating to the PVWA.
+2024-05-08 06:03:08 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:03:08 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:03:09 |       Debug | Saving psPAS session.
+2024-05-08 06:03:09 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:03:09 | Information | Getting server admin Account(s).
+2024-05-08 06:03:09 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:03:10 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:03:11 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:03:11 | Information | Unlocked the Account.
+2024-05-08 06:03:11 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:03:12 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:03:12 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:03:12 | Information | Unlocked the Account.
+2024-05-08 06:03:12 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:03:12 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:03:13 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:03:13 | Information | Unlocked the Account.
+2024-05-08 06:03:13 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:03:13 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:03:13 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:03:14 | Information | Unlocked the Account.
+2024-05-08 06:03:14 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:03:14 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:03:14 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:03:15 | Information | Unlocked the Account.
+2024-05-08 06:03:15 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:03:15 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:03:15 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:03:15 | Information | Unlocked the Account.
+2024-05-08 06:03:15 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:03:16 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:03:16 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:03:17 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:03:17 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:03:18 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:03:18 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:03:18 | Information | Jobs Created. Count:  3
+2024-05-08 06:03:18 | Information | Submitting Jobs.
+2024-05-08 06:03:18 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:03:18 | Information | Jobs Completed.
+2024-05-08 06:06:41 | Information | **************************************************
+2024-05-08 06:06:41 |       Force | ******************** Starting ********************
+2024-05-08 06:06:41 | Information | **************************************************
+2024-05-08 06:06:41 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:06:41 |       Force | Current Logging Level:  Trace
+2024-05-08 06:06:41 | Information | Analyzing the input file(s).
+2024-05-08 06:06:41 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:06:41 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:06:41 | Information |     File Extension   :  .csv
+2024-05-08 06:06:41 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:06:41 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:06:41 | Information |       Rows Imported  :  30
+2024-05-08 06:06:41 | Information | Total Rows Imported  :  30
+2024-05-08 06:06:41 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:06:41 | Information | Admin Creds Needed   :  6
+2024-05-08 06:06:41 | Information | Service Creds Needed :  5
+2024-05-08 06:06:41 | Information | Authenticating to the PVWA.
+2024-05-08 06:06:41 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:06:41 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:06:42 |       Debug | Saving psPAS session.
+2024-05-08 06:06:43 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:06:43 | Information | Getting server admin Account(s).
+2024-05-08 06:06:43 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:06:43 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:06:43 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:06:44 | Information | Unlocked the Account.
+2024-05-08 06:06:44 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:06:44 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:06:44 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:06:44 | Information | Unlocked the Account.
+2024-05-08 06:06:44 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:06:44 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:06:45 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:06:45 | Information | Unlocked the Account.
+2024-05-08 06:06:45 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:06:45 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:06:45 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:06:45 | Information | Unlocked the Account.
+2024-05-08 06:06:46 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:06:46 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:06:46 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:06:46 | Information | Unlocked the Account.
+2024-05-08 06:06:46 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:06:46 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:06:47 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:06:47 | Information | Unlocked the Account.
+2024-05-08 06:06:47 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:06:47 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:06:48 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:06:48 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:06:49 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:06:49 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:06:49 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:06:49 | Information | Jobs Created. Count:  3
+2024-05-08 06:06:49 | Information | Submitting Jobs.
+2024-05-08 06:06:50 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:06:50 | Information | Jobs Completed.
+2024-05-08 06:06:50 | Information | Job (1) Name (Job1) Started at (8/5/2024 6:06:49 PM)
+2024-05-08 06:13:02 | Information | **************************************************
+2024-05-08 06:13:02 |       Force | ******************** Starting ********************
+2024-05-08 06:13:02 | Information | **************************************************
+2024-05-08 06:13:02 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:13:02 |       Force | Current Logging Level:  Trace
+2024-05-08 06:13:02 | Information | Analyzing the input file(s).
+2024-05-08 06:13:02 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:13:02 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:13:02 | Information |     File Extension   :  .csv
+2024-05-08 06:13:03 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:13:03 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:13:03 | Information |       Rows Imported  :  30
+2024-05-08 06:13:03 | Information | Total Rows Imported  :  30
+2024-05-08 06:13:03 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:13:03 | Information | Admin Creds Needed   :  6
+2024-05-08 06:13:03 | Information | Service Creds Needed :  5
+2024-05-08 06:13:03 | Information | Authenticating to the PVWA.
+2024-05-08 06:13:03 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:13:03 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:13:05 |       Debug | Saving psPAS session.
+2024-05-08 06:13:05 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:13:05 | Information | Getting server admin Account(s).
+2024-05-08 06:13:05 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:13:05 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:13:06 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:13:06 | Information | Unlocked the Account.
+2024-05-08 06:13:06 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:13:06 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:13:06 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:13:06 | Information | Unlocked the Account.
+2024-05-08 06:13:06 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:13:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:13:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:13:07 | Information | Unlocked the Account.
+2024-05-08 06:13:07 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:13:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:13:08 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:13:08 | Information | Unlocked the Account.
+2024-05-08 06:13:08 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:13:08 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:13:08 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:13:08 | Information | Unlocked the Account.
+2024-05-08 06:13:08 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:13:09 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:13:09 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:13:09 | Information | Unlocked the Account.
+2024-05-08 06:13:09 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:13:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:13:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:13:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:13:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:13:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:13:12 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:13:12 | Information | Jobs Created. Count:  3
+2024-05-08 06:13:12 | Information | Submitting Jobs.
+2024-05-08 06:13:12 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:13:12 | Information | Jobs Completed.
+2024-05-08 06:13:12 | Information | Job (1) Name (Job1) Started at (8/5/2024 6:13:12 PM)
+2024-08-05 06:13:12 | 00000001 |                    Host1 | Connecting to host (Host1.test.you.com).
+2024-08-05 06:13:12 | 00000001 |                    Host1 | Connection FAILED to host (Host1.test.you.com).
+
+2024-05-08 06:14:15 | Information | Job Queue.
+2024-05-08 06:15:03 | Information | **************************************************
+2024-05-08 06:15:04 |       Force | ******************** Starting ********************
+2024-05-08 06:15:04 | Information | **************************************************
+2024-05-08 06:15:04 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:15:04 |       Force | Current Logging Level:  Trace
+2024-05-08 06:15:04 | Information | Analyzing the input file(s).
+2024-05-08 06:15:04 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:15:04 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:15:04 | Information |     File Extension   :  .csv
+2024-05-08 06:15:04 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:15:04 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:15:04 | Information |       Rows Imported  :  30
+2024-05-08 06:15:04 | Information | Total Rows Imported  :  30
+2024-05-08 06:15:04 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:15:04 | Information | Admin Creds Needed   :  6
+2024-05-08 06:15:04 | Information | Service Creds Needed :  5
+2024-05-08 06:15:04 | Information | Authenticating to the PVWA.
+2024-05-08 06:15:04 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:15:04 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:15:05 |       Debug | Saving psPAS session.
+2024-05-08 06:15:05 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:15:05 | Information | Getting server admin Account(s).
+2024-05-08 06:15:05 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:15:06 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:15:06 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:15:07 | Information | Unlocked the Account.
+2024-05-08 06:15:07 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:15:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:15:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:15:07 | Information | Unlocked the Account.
+2024-05-08 06:15:07 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:15:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:15:08 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:15:08 | Information | Unlocked the Account.
+2024-05-08 06:15:08 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:15:08 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:15:08 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:15:09 | Information | Unlocked the Account.
+2024-05-08 06:15:09 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:15:09 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:15:09 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:15:09 | Information | Unlocked the Account.
+2024-05-08 06:15:09 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:15:10 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:15:10 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:15:10 | Information | Unlocked the Account.
+2024-05-08 06:15:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:15:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:15:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:15:12 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:15:12 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:15:13 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:15:14 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:15:14 | Information | Jobs Created. Count:  3
+2024-05-08 06:15:14 | Information | Submitting Jobs.
+2024-05-08 06:15:14 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:15:14 | Information | Jobs Completed.
+2024-05-08 06:15:14 | Information | Job (1) Name (Job1) Started at (8/5/2024 6:15:14 PM)
+2024-08-05 06:15:14 | 00000001 |                    Host1 | Connecting to host (Host1.test.you.com).
+2024-08-05 06:15:14 | 00000001 |                    Host1 | Connection FAILED to host (Host1.test.you.com).
+
+2024-05-08 06:15:14 | Information | Job Queue.
+2024-05-08 06:17:17 | Information | **************************************************
+2024-05-08 06:17:17 |       Force | ******************** Starting ********************
+2024-05-08 06:17:17 | Information | **************************************************
+2024-05-08 06:17:17 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:17:17 |       Force | Current Logging Level:  Trace
+2024-05-08 06:17:17 | Information | Analyzing the input file(s).
+2024-05-08 06:17:17 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:17:17 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:17:17 | Information |     File Extension   :  .csv
+2024-05-08 06:17:17 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:17:17 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:17:17 | Information |       Rows Imported  :  30
+2024-05-08 06:17:17 | Information | Total Rows Imported  :  30
+2024-05-08 06:17:17 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:17:17 | Information | Admin Creds Needed   :  6
+2024-05-08 06:17:17 | Information | Service Creds Needed :  5
+2024-05-08 06:17:17 | Information | Authenticating to the PVWA.
+2024-05-08 06:17:17 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:17:17 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:17:18 |       Debug | Saving psPAS session.
+2024-05-08 06:17:18 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:17:18 | Information | Getting server admin Account(s).
+2024-05-08 06:17:18 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:17:19 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:17:19 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:17:19 | Information | Unlocked the Account.
+2024-05-08 06:17:19 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:17:19 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:17:20 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:17:20 | Information | Unlocked the Account.
+2024-05-08 06:17:20 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:17:20 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:17:20 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:17:20 | Information | Unlocked the Account.
+2024-05-08 06:17:20 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:17:21 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:17:21 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:17:21 | Information | Unlocked the Account.
+2024-05-08 06:17:21 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:17:21 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:17:22 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:17:22 | Information | Unlocked the Account.
+2024-05-08 06:17:22 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:17:22 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:17:22 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:17:22 | Information | Unlocked the Account.
+2024-05-08 06:17:22 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:17:23 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:17:23 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:17:24 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:17:24 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:17:25 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:17:26 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:17:26 | Information | Jobs Created. Count:  3
+2024-05-08 06:17:26 | Information | Submitting Jobs.
+2024-05-08 06:17:26 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:17:26 | Information | Jobs Completed.
+2024-05-08 06:17:26 | Information | Job (2) Name (Job2) Started at (8/5/2024 6:17:26 PM)
+2024-08-05 06:17:26 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:17:26 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:17:26 | Information | Job Queue.
+2024-05-08 06:17:26 | Information | Job (3) Name (Job3) Started at (8/5/2024 6:17:26 PM)
+2024-08-05 06:17:26 | 00000003 |                    Host3 | Connecting to host (Host3.test.you.com).
+2024-08-05 06:17:26 | 00000003 |                    Host3 | Connection FAILED to host (Host3.test.you.com).
+
+2024-05-08 06:17:26 | Information | Job Queue.
+2024-05-08 06:17:26 | Information | Job (4) Name (Job4) Started at (8/5/2024 6:17:26 PM)
+
+2024-05-08 06:17:26 | Information | Job Queue.
+2024-05-08 06:18:04 | Information | **************************************************
+2024-05-08 06:18:04 |       Force | ******************** Starting ********************
+2024-05-08 06:18:04 | Information | **************************************************
+2024-05-08 06:18:04 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:18:04 |       Force | Current Logging Level:  Trace
+2024-05-08 06:18:04 | Information | Analyzing the input file(s).
+2024-05-08 06:18:04 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:18:04 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:18:04 | Information |     File Extension   :  .csv
+2024-05-08 06:18:04 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:18:04 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:18:04 | Information |       Rows Imported  :  30
+2024-05-08 06:18:04 | Information | Total Rows Imported  :  30
+2024-05-08 06:18:04 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:18:05 | Information | Admin Creds Needed   :  6
+2024-05-08 06:18:05 | Information | Service Creds Needed :  5
+2024-05-08 06:18:05 | Information | Authenticating to the PVWA.
+2024-05-08 06:18:05 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:18:05 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:18:06 |       Debug | Saving psPAS session.
+2024-05-08 06:18:06 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:18:06 | Information | Getting server admin Account(s).
+2024-05-08 06:18:06 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:18:06 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:18:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:18:07 | Information | Unlocked the Account.
+2024-05-08 06:18:07 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:18:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:18:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:18:08 | Information | Unlocked the Account.
+2024-05-08 06:18:08 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:18:08 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:18:08 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:18:08 | Information | Unlocked the Account.
+2024-05-08 06:18:08 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:18:09 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:18:09 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:18:09 | Information | Unlocked the Account.
+2024-05-08 06:18:09 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:18:09 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:18:09 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:18:10 | Information | Unlocked the Account.
+2024-05-08 06:18:10 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:18:10 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:18:10 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:18:10 | Information | Unlocked the Account.
+2024-05-08 06:18:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:18:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:18:11 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:18:12 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:18:12 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:18:13 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:18:13 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:18:13 | Information | Jobs Created. Count:  3
+2024-05-08 06:18:13 | Information | Submitting Jobs.
+2024-05-08 06:18:13 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:18:13 | Information | Jobs Completed.
+2024-05-08 06:18:13 | Information | Job (2) Name (Job2) Started at (8/5/2024 6:18:13 PM)
+2024-08-05 06:18:13 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:18:13 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:19:27 | Information | **************************************************
+2024-05-08 06:19:27 |       Force | ******************** Starting ********************
+2024-05-08 06:19:27 | Information | **************************************************
+2024-05-08 06:19:27 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:19:27 |       Force | Current Logging Level:  Trace
+2024-05-08 06:19:27 | Information | Analyzing the input file(s).
+2024-05-08 06:19:27 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:19:27 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:19:27 | Information |     File Extension   :  .csv
+2024-05-08 06:19:27 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:19:27 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:19:27 | Information |       Rows Imported  :  30
+2024-05-08 06:19:27 | Information | Total Rows Imported  :  30
+2024-05-08 06:19:27 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:19:27 | Information | Admin Creds Needed   :  6
+2024-05-08 06:19:27 | Information | Service Creds Needed :  5
+2024-05-08 06:19:27 | Information | Authenticating to the PVWA.
+2024-05-08 06:19:27 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:19:27 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:19:28 |       Debug | Saving psPAS session.
+2024-05-08 06:19:29 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:19:29 | Information | Getting server admin Account(s).
+2024-05-08 06:19:29 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:19:29 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:19:29 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:19:29 | Information | Unlocked the Account.
+2024-05-08 06:19:29 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:19:30 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:19:30 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:19:30 | Information | Unlocked the Account.
+2024-05-08 06:19:30 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:19:30 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:19:31 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:19:31 | Information | Unlocked the Account.
+2024-05-08 06:19:31 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:19:31 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:19:31 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:19:31 | Information | Unlocked the Account.
+2024-05-08 06:19:31 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:19:32 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:19:32 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:19:32 | Information | Unlocked the Account.
+2024-05-08 06:19:32 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:19:32 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:19:33 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:19:33 | Information | Unlocked the Account.
+2024-05-08 06:19:33 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:19:33 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:19:34 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:19:34 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:19:35 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:19:35 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:19:36 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:19:36 | Information | Jobs Created. Count:  3
+2024-05-08 06:19:36 | Information | Submitting Jobs.
+2024-05-08 06:19:36 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:19:36 | Information | Jobs Completed.
+2024-05-08 06:19:36 | Information | Job (2) Name (Host2) Started at (8/5/2024 6:19:36 PM)
+2024-08-05 06:19:36 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:19:36 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:19:36 | Information | Job Queue.
+2024-05-08 06:19:36 | Information | Job (3) Name (Host3) Started at (8/5/2024 6:19:36 PM)
+2024-08-05 06:19:36 | 00000003 |                    Host3 | Connecting to host (Host3.test.you.com).
+2024-08-05 06:19:36 | 00000003 |                    Host3 | Connection FAILED to host (Host3.test.you.com).
+
+2024-05-08 06:19:36 | Information | Job Queue.
+2024-05-08 06:19:36 | Information | Job () Name () Started at (8/5/2024 6:19:36 PM)
+
+2024-05-08 06:19:36 | Information | Job Queue.
+2024-05-08 06:23:14 | Information | **************************************************
+2024-05-08 06:23:15 |       Force | ******************** Starting ********************
+2024-05-08 06:23:15 | Information | **************************************************
+2024-05-08 06:23:15 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:23:15 |       Force | Current Logging Level:  Trace
+2024-05-08 06:23:15 | Information | Analyzing the input file(s).
+2024-05-08 06:23:15 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:23:15 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:23:15 | Information |     File Extension   :  .csv
+2024-05-08 06:23:15 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:23:15 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:23:15 | Information |       Rows Imported  :  30
+2024-05-08 06:23:15 | Information | Total Rows Imported  :  30
+2024-05-08 06:23:15 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:23:15 | Information | Admin Creds Needed   :  6
+2024-05-08 06:23:15 | Information | Service Creds Needed :  5
+2024-05-08 06:23:15 | Information | Authenticating to the PVWA.
+2024-05-08 06:23:15 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:23:15 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:23:16 |       Debug | Saving psPAS session.
+2024-05-08 06:23:16 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:23:16 | Information | Getting server admin Account(s).
+2024-05-08 06:23:16 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:23:17 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:23:17 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:23:18 | Information | Unlocked the Account.
+2024-05-08 06:23:18 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:23:18 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:23:18 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:23:18 | Information | Unlocked the Account.
+2024-05-08 06:23:18 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:23:19 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:23:19 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:23:19 | Information | Unlocked the Account.
+2024-05-08 06:23:19 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:23:19 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:23:19 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:23:20 | Information | Unlocked the Account.
+2024-05-08 06:23:20 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:23:20 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:23:20 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:23:20 | Information | Unlocked the Account.
+2024-05-08 06:23:20 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:23:21 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:23:21 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:23:21 | Information | Unlocked the Account.
+2024-05-08 06:23:21 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:23:21 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:23:22 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:23:22 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:23:23 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:23:23 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:23:23 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:23:24 | Information | Jobs Created. Count:  3
+2024-05-08 06:23:24 | Information | Submitting Jobs.
+2024-05-08 06:23:24 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:23:24 | Information | Jobs Completed.
+2024-05-08 06:23:24 | Information | Job (2) Name (Host2) Started at (8/5/2024 6:23:24 PM)
+2024-08-05 06:23:24 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:23:24 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:23:42 | Information | Job Queue.
+2024-05-08 06:23:42 | Information | Job (3) Name (Host3) Started at (8/5/2024 6:23:24 PM)
+2024-08-05 06:23:24 | 00000003 |                    Host3 | Connecting to host (Host3.test.you.com).
+2024-08-05 06:23:24 | 00000003 |                    Host3 | Connection FAILED to host (Host3.test.you.com).
+
+2024-05-08 06:32:02 | Information | **************************************************
+2024-05-08 06:32:02 |       Force | ******************** Starting ********************
+2024-05-08 06:32:02 | Information | **************************************************
+2024-05-08 06:32:02 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:32:02 |       Force | Current Logging Level:  Trace
+2024-05-08 06:32:02 | Information | Analyzing the input file(s).
+2024-05-08 06:32:02 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:32:02 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:32:02 | Information |     File Extension   :  .csv
+2024-05-08 06:32:02 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:32:02 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:32:02 | Information |       Rows Imported  :  30
+2024-05-08 06:32:02 | Information | Total Rows Imported  :  30
+2024-05-08 06:32:02 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:32:02 | Information | Admin Creds Needed   :  6
+2024-05-08 06:32:02 | Information | Service Creds Needed :  5
+2024-05-08 06:32:02 | Information | Authenticating to the PVWA.
+2024-05-08 06:32:02 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:32:02 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:32:03 |       Debug | Saving psPAS session.
+2024-05-08 06:32:03 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:32:03 | Information | Getting server admin Account(s).
+2024-05-08 06:32:03 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:32:04 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:32:04 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:32:04 | Information | Unlocked the Account.
+2024-05-08 06:32:04 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:32:04 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:32:05 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:32:05 | Information | Unlocked the Account.
+2024-05-08 06:32:05 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:32:05 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:32:05 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:32:06 | Information | Unlocked the Account.
+2024-05-08 06:32:06 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:32:06 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:32:06 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:32:06 | Information | Unlocked the Account.
+2024-05-08 06:32:06 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:32:06 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:32:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:32:07 | Information | Unlocked the Account.
+2024-05-08 06:32:07 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:32:07 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:32:07 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:32:07 | Information | Unlocked the Account.
+2024-05-08 06:32:07 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:32:08 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:32:08 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:32:09 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:32:09 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:32:10 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:32:10 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:32:10 | Information | Jobs Created. Count:  3
+2024-05-08 06:32:10 | Information | Submitting Jobs.
+2024-05-08 06:32:10 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:32:10 | Information | Jobs Completed.
+2024-05-08 06:32:10 | Information | Job () Name () Started at ()
+
+2024-05-08 06:33:35 | Information | **************************************************
+2024-05-08 06:33:36 |       Force | ******************** Starting ********************
+2024-05-08 06:33:36 | Information | **************************************************
+2024-05-08 06:33:36 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:33:36 |       Force | Current Logging Level:  Trace
+2024-05-08 06:33:36 | Information | Analyzing the input file(s).
+2024-05-08 06:33:36 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:33:36 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:33:36 | Information |     File Extension   :  .csv
+2024-05-08 06:33:36 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:33:36 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:33:36 | Information |       Rows Imported  :  30
+2024-05-08 06:33:36 | Information | Total Rows Imported  :  30
+2024-05-08 06:33:36 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:33:36 | Information | Admin Creds Needed   :  6
+2024-05-08 06:33:36 | Information | Service Creds Needed :  5
+2024-05-08 06:33:36 | Information | Authenticating to the PVWA.
+2024-05-08 06:33:36 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:33:36 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:33:37 |       Debug | Saving psPAS session.
+2024-05-08 06:33:37 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:33:37 | Information | Getting server admin Account(s).
+2024-05-08 06:33:37 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:33:38 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:33:38 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:33:38 | Information | Unlocked the Account.
+2024-05-08 06:33:38 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:33:39 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:33:39 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:33:39 | Information | Unlocked the Account.
+2024-05-08 06:33:39 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:33:39 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:33:40 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:33:40 | Information | Unlocked the Account.
+2024-05-08 06:33:40 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:33:40 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:33:41 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:33:41 | Information | Unlocked the Account.
+2024-05-08 06:33:41 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:33:41 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:33:41 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:33:42 | Information | Unlocked the Account.
+2024-05-08 06:33:42 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:33:42 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:33:42 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:33:42 | Information | Unlocked the Account.
+2024-05-08 06:33:42 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:33:43 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:33:43 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:33:44 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:33:44 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:33:45 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:33:45 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:33:45 | Information | Jobs Created. Count:  3
+2024-05-08 06:33:45 | Information | Submitting Jobs.
+2024-05-08 06:33:45 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:33:45 | Information | Jobs Completed.
+2024-05-08 06:33:45 | Information | Job (3) Name (Host3) Started at ()
+2024-08-05 06:33:45 | 00000003 |                    Host3 | Connecting to host (Host3.test.you.com).
+2024-08-05 06:33:45 | 00000003 |                    Host3 | Connection FAILED to host (Host3.test.you.com).
+
+2024-05-08 06:34:40 | Information | Job Queue.
+2024-05-08 06:34:40 | Information | Job (2) Name (Host2) Started at ()
+2024-08-05 06:33:45 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:33:45 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:34:53 | Information | Job Queue.
+2024-05-08 06:34:53 | Information | Job (1) Name (Host1) Started at ()
+2024-08-05 06:33:45 | 00000001 |                    Host1 | Connecting to host (Host1.test.you.com).
+2024-08-05 06:33:45 | 00000001 |                    Host1 | Connection FAILED to host (Host1.test.you.com).
+
+2024-05-08 06:36:58 | Information | Job Queue.
+2024-05-08 06:41:38 | Information | **************************************************
+2024-05-08 06:41:38 |       Force | ******************** Starting ********************
+2024-05-08 06:41:38 | Information | **************************************************
+2024-05-08 06:41:38 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-05_Logger.log
+2024-05-08 06:41:38 |       Force | Current Logging Level:  Trace
+2024-05-08 06:41:38 | Information | Analyzing the input file(s).
+2024-05-08 06:41:38 |       Force |         Input File   :  Input_File_01.csv
+2024-05-08 06:41:38 | Information |     File Name Only   :  Input_File_01
+2024-05-08 06:41:38 | Information |     File Extension   :  .csv
+2024-05-08 06:41:38 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-05-08 06:41:38 | Information |          File Size   :  5,368.00KB
+2024-05-08 06:41:38 | Information |       Rows Imported  :  30
+2024-05-08 06:41:38 | Information | Total Rows Imported  :  30
+2024-05-08 06:41:38 | Information | Sorted & Unique Rows :  30
+2024-05-08 06:41:38 | Information | Admin Creds Needed   :  6
+2024-05-08 06:41:38 | Information | Service Creds Needed :  5
+2024-05-08 06:41:38 | Information | Authenticating to the PVWA.
+2024-05-08 06:41:38 |       Debug | Requested Authentication Method:  PKIPN
+2024-05-08 06:41:38 |       Debug | New URI Created:  https://dev-epv.nvidia.com/
+2024-05-08 06:41:39 |       Debug | Saving psPAS session.
+2024-05-08 06:41:40 |       Debug | Clearing cookies from psPAS session.
+2024-05-08 06:41:40 | Information | Getting server admin Account(s).
+2024-05-08 06:41:40 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.10
+2024-05-08 06:41:40 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.10) : Username (Administrator)
+2024-05-08 06:41:40 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.10
+                	Username : Administrator
+                	     ID  : 70_3
+                	Locked By: jmcwilliams
+2024-05-08 06:41:41 | Information | Unlocked the Account.
+2024-05-08 06:41:41 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.11
+2024-05-08 06:41:41 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.11) : Username (Administrator)
+2024-05-08 06:41:41 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.11
+                	Username : Administrator
+                	     ID  : 70_4
+                	Locked By: jmcwilliams
+2024-05-08 06:41:41 | Information | Unlocked the Account.
+2024-05-08 06:41:41 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.12
+2024-05-08 06:41:42 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.12) : Username (Administrator)
+2024-05-08 06:41:42 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.12
+                	Username : Administrator
+                	     ID  : 70_5
+                	Locked By: jmcwilliams
+2024-05-08 06:41:42 | Information | Unlocked the Account.
+2024-05-08 06:41:42 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.13
+2024-05-08 06:41:42 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.13) : Username (Administrator)
+2024-05-08 06:41:42 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.13
+                	Username : Administrator
+                	     ID  : 70_6
+                	Locked By: jmcwilliams
+2024-05-08 06:41:43 | Information | Unlocked the Account.
+2024-05-08 06:41:43 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.14
+2024-05-08 06:41:43 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.14) : Username (Administrator)
+2024-05-08 06:41:43 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.14
+                	Username : Administrator
+                	     ID  : 70_7
+                	Locked By: jmcwilliams
+2024-05-08 06:41:43 | Information | Unlocked the Account.
+2024-05-08 06:41:43 | Information | Getting Account Information:  Test_Accounts_JLM_WinService/Administrator/192.168.0.15
+2024-05-08 06:41:44 | Information | 1 Account Found!.  Safe (Test_Accounts_JLM_WinService) : Address (192.168.0.15) : Username (Administrator)
+2024-05-08 06:41:44 |     Warning | Account is Locked!  
+                	   Safe  : Test_Accounts_JLM_WinService
+                	Address  : 192.168.0.15
+                	Username : Administrator
+                	     ID  : 70_8
+                	Locked By: jmcwilliams
+2024-05-08 06:41:44 | Information | Unlocked the Account.
+2024-05-08 06:41:44 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.14) : ID (70_7))
+2024-05-08 06:41:45 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.10) : ID (70_3))
+2024-05-08 06:41:45 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.11) : ID (70_4))
+2024-05-08 06:41:46 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.13) : ID (70_6))
+2024-05-08 06:41:46 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.15) : ID (70_8))
+2024-05-08 06:41:46 |     Verbose | Retrieving Credential for Account (Test_Accounts_JLM_WinService/Administrator/192.168.0.12) : ID (70_5))
+2024-05-08 06:41:47 | Information | Admin Credentials Retrieved (6).
+2024-05-08 06:41:47 | Information | Jobs Created. Count:  3
+2024-05-08 06:41:47 | Information | Submitting Jobs.
+2024-05-08 06:41:47 | Information | Submitted Jobs.  Waiting
+2024-05-08 06:41:47 | Information | Jobs Completed.
+2024-05-08 06:42:49 | Information | Job (3) Name (Host3) Started at ()
+2024-08-05 06:41:47 | 00000003 |                    Host3 | Connecting to host (Host3.test.you.com).
+2024-08-05 06:41:47 | 00000003 |                    Host3 | Connection FAILED to host (Host3.test.you.com).
+
+2024-05-08 06:42:49 | Information | Job Queue.
+2024-05-08 06:42:49 | Information | Job (2) Name (Host2) Started at ()
+2024-08-05 06:41:47 | 00000002 |                    Host2 | Connecting to host (Host2.test.you.com).
+2024-08-05 06:41:47 | 00000002 |                    Host2 | Connection FAILED to host (Host2.test.you.com).
+
+2024-05-08 06:42:49 | Information | Job Queue.
+2024-05-08 06:42:50 | Information | Job (1) Name (Host1) Started at ()
+2024-08-05 06:41:47 | 00000001 |                    Host1 | Connecting to host (Host1.test.you.com).
+2024-08-05 06:41:47 | 00000001 |                    Host1 | Connection FAILED to host (Host1.test.you.com).
+
+2024-05-08 06:42:50 | Information | Job Queue.

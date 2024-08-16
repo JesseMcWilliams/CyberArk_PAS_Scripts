@@ -1,0 +1,257 @@
+2024-24-06 05:12:51 |       Force | Current Logging Level : 
+2024-24-06 05:12:51 |       Force | Test Log Message : Force
+2024-24-06 05:12:51 |        None | Test Log Message : None
+2024-24-06 05:12:51 |    Critical | Test Log Message : Critical
+2024-24-06 05:12:51 |       Error | Test Log Message : Error
+2024-24-06 05:12:51 |     Warning | Test Log Message : Warning
+2024-24-06 05:12:51 |       Debug | Test Log Message : Debug
+2024-24-06 05:12:51 |     Verbose | Test Log Message : Verbose
+2024-24-06 05:12:51 |       Trace | Test Log Message : Trace
+2024-24-06 05:13:04 |       Force | Current Logging Level : Verbose
+2024-24-06 05:13:04 |       Force | Test Log Message : Force
+2024-24-06 05:13:04 |        None | Test Log Message : None
+2024-24-06 05:13:04 |    Critical | Test Log Message : Critical
+2024-24-06 05:13:04 |       Error | Test Log Message : Error
+2024-24-06 05:13:04 |     Warning | Test Log Message : Warning
+2024-24-06 05:13:04 |       Debug | Test Log Message : Debug
+2024-24-06 05:13:04 |     Verbose | Test Log Message : Verbose
+2024-24-06 05:13:04 |       Trace | Test Log Message : Trace
+2024-24-06 05:13:35 |       Force | Current Logging Level : Verbose
+2024-24-06 05:13:35 |       Force | Test Log Message For : Force
+2024-24-06 05:13:35 |        None | Test Log Message : None
+2024-24-06 05:13:35 |    Critical | Test Log Message : Critical
+2024-24-06 05:13:35 |       Error | Test Log Message : Error
+2024-24-06 05:13:35 |     Warning | Test Log Message : Warning
+2024-24-06 05:13:35 |       Debug | Test Log Message : Debug
+2024-24-06 05:13:35 |     Verbose | Test Log Message : Verbose
+2024-24-06 05:13:35 |       Trace | Test Log Message : Trace
+2024-24-06 05:14:13 |       Force | Current Logging Level : Verbose
+2024-24-06 05:14:13 |       Force |  Test Log Message For : Force
+2024-24-06 05:14:13 |        None |  Test Log Message For : None
+2024-24-06 05:14:13 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:14:13 |       Error |  Test Log Message For : Error
+2024-24-06 05:14:13 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:14:13 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:14:13 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:14:13 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:16:25 |       Force | Current Logging Level : Debug
+2024-24-06 05:16:25 |       Force |  Test Log Message For : Force
+2024-24-06 05:16:25 |        None |  Test Log Message For : None
+2024-24-06 05:16:25 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:16:25 |       Error |  Test Log Message For : Error
+2024-24-06 05:16:25 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:16:25 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:16:56 |       Force | Current Logging Level : Trace
+2024-24-06 05:16:56 |       Force |  Test Log Message For : Force
+2024-24-06 05:16:56 |        None |  Test Log Message For : None
+2024-24-06 05:16:56 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:16:56 |       Error |  Test Log Message For : Error
+2024-24-06 05:16:56 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:16:56 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:16:56 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:16:56 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:17:08 |       Force | Current Logging Level : Trace
+2024-24-06 05:17:09 |       Force |  Test Log Message For : Force
+2024-24-06 05:17:09 |        None |  Test Log Message For : None
+2024-24-06 05:17:09 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:17:09 |       Error |  Test Log Message For : Error
+2024-24-06 05:17:09 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:17:09 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:17:09 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:17:09 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:17:23 |       Force | Current Logging Level : Verbose
+2024-24-06 05:17:23 |       Force |  Test Log Message For : Force
+2024-24-06 05:17:23 |        None |  Test Log Message For : None
+2024-24-06 05:17:23 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:17:23 |       Error |  Test Log Message For : Error
+2024-24-06 05:17:23 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:17:23 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:17:23 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:17:23 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:17:33 |       Force | Current Logging Level : Debug
+2024-24-06 05:17:33 |       Force |  Test Log Message For : Force
+2024-24-06 05:17:33 |        None |  Test Log Message For : None
+2024-24-06 05:17:33 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:17:33 |       Error |  Test Log Message For : Error
+2024-24-06 05:17:33 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:17:33 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:19:58 |       Force | Current Logging Level : Debug
+2024-24-06 05:19:58 |       Force |  Test Log Message For : Force
+2024-24-06 05:19:58 |        None |  Test Log Message For : None
+2024-24-06 05:19:58 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:19:58 |       Error |  Test Log Message For : Error
+2024-24-06 05:19:58 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:19:58 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:20:20 |       Force | Current Logging Level : Debug
+2024-24-06 05:20:20 |       Force |  Test Log Message For : Force
+2024-24-06 05:20:20 |        None |  Test Log Message For : None
+2024-24-06 05:20:20 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:20:20 |       Error |  Test Log Message For : Error
+2024-24-06 05:20:20 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:20:20 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:20:32 |       Force | Current Logging Level : Debug
+2024-24-06 05:20:32 |       Force |  Test Log Message For : Force
+2024-24-06 05:20:32 |        None |  Test Log Message For : None
+2024-24-06 05:20:32 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:20:32 |       Error |  Test Log Message For : Error
+2024-24-06 05:20:32 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:20:32 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:21:38 |       Force | Current Logging Level : Debug
+2024-24-06 05:21:44 |       Force |  Test Log Message For : Force
+2024-24-06 05:21:47 |        None |  Test Log Message For : None
+2024-24-06 05:21:49 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:21:51 |       Error |  Test Log Message For : Error
+2024-24-06 05:21:52 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:21:52 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:25:31 |       Force | Current Logging Level : Debug
+2024-24-06 05:25:31 |       Force |  Test Log Message For : Force
+2024-24-06 05:25:31 |        None |  Test Log Message For : None
+2024-24-06 05:25:31 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:25:31 |       Error |  Test Log Message For : Error
+2024-24-06 05:25:31 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:25:31 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:27:28 |       Force | Current Logging Level : Debug
+2024-24-06 05:27:38 |       Force |  Test Log Message For : Force
+2024-24-06 05:27:39 |        None |  Test Log Message For : None
+2024-24-06 05:27:40 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:27:42 |       Error |  Test Log Message For : Error
+2024-24-06 05:27:43 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:27:44 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:33:35 |       Force | Current Logging Level : Trace
+2024-24-06 05:33:35 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:33:35 |       Force |  Test Log Message For : Force
+2024-24-06 05:33:35 |        None |  Test Log Message For : None
+2024-24-06 05:33:35 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:33:35 |       Error |  Test Log Message For : Error
+2024-24-06 05:33:35 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:33:35 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:33:35 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:33:35 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:33:47 |       Force | Current Logging Level : Verbose
+2024-24-06 05:33:47 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:33:47 |       Force |  Test Log Message For : Force
+2024-24-06 05:33:47 |        None |  Test Log Message For : None
+2024-24-06 05:33:47 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:33:47 |       Error |  Test Log Message For : Error
+2024-24-06 05:33:47 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:33:47 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:33:47 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:35:40 |       Force | Current Logging Level : Verbose
+2024-24-06 05:35:40 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:35:40 |       Force |  Test Log Message For : Force
+2024-24-06 05:35:40 |        None |  Test Log Message For : None
+2024-24-06 05:35:40 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:35:40 |       Error |  Test Log Message For : Error
+2024-24-06 05:35:40 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:35:40 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:35:40 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:37:55 |       Force | Current Logging Level : Verbose
+2024-24-06 05:37:55 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:37:57 |       Force |  Test Log Message For : Force
+2024-24-06 05:37:58 |        None |  Test Log Message For : None
+2024-24-06 05:37:59 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:38:00 |       Error |  Test Log Message For : Error
+2024-24-06 05:38:01 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:38:02 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:38:05 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:39:38 |       Force | Current Logging Level : Verbose
+2024-24-06 05:39:38 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:39:38 |       Force |  Test Log Message For : Force
+2024-24-06 05:39:38 |        None |  Test Log Message For : None
+2024-24-06 05:39:38 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:39:38 |       Error |  Test Log Message For : Error
+2024-24-06 05:39:38 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:39:38 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:39:38 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:39:38 |       Trace |  Test Log Message For : Trace : DNMR
+2024-24-06 05:43:09 |       Force | Current Logging Level : Verbose
+2024-24-06 05:43:09 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:43:10 |       Force |  Test Log Message For : Force
+2024-24-06 05:43:10 |        None |  Test Log Message For : None
+2024-24-06 05:43:10 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:43:10 |       Error |  Test Log Message For : Error
+2024-24-06 05:43:10 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:43:10 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:43:10 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:43:21 |       Force | Current Logging Level : Debug
+2024-24-06 05:43:21 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:43:21 |       Force |  Test Log Message For : Force
+2024-24-06 05:43:21 |        None |  Test Log Message For : None
+2024-24-06 05:43:21 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:43:21 |       Error |  Test Log Message For : Error
+2024-24-06 05:43:21 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:43:21 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:43:31 |       Force | Current Logging Level : Warning
+2024-24-06 05:43:31 |       Force |  Test Log Message For : Force
+2024-24-06 05:43:31 |        None |  Test Log Message For : None
+2024-24-06 05:43:31 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:43:31 |       Error |  Test Log Message For : Error
+2024-24-06 05:43:31 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:43:42 |       Force | Current Logging Level : Error
+2024-24-06 05:43:42 |       Force |  Test Log Message For : Force
+2024-24-06 05:43:42 |        None |  Test Log Message For : None
+2024-24-06 05:43:42 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:43:42 |       Error |  Test Log Message For : Error
+2024-24-06 05:43:51 |       Force | Current Logging Level : Critical
+2024-24-06 05:43:51 |       Force |  Test Log Message For : Force
+2024-24-06 05:43:51 |        None |  Test Log Message For : None
+2024-24-06 05:43:51 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:44:01 |       Force | Current Logging Level : None
+2024-24-06 05:44:01 |       Force |  Test Log Message For : Force
+2024-24-06 05:44:01 |        None |  Test Log Message For : None
+2024-24-06 05:44:16 |       Force | Current Logging Level : Force
+2024-24-06 05:44:16 |       Force |  Test Log Message For : Force
+2024-24-06 05:44:31 |       Force | Current Logging Level : Trace
+2024-24-06 05:44:31 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:44:31 |       Force |  Test Log Message For : Force
+2024-24-06 05:44:31 |        None |  Test Log Message For : None
+2024-24-06 05:44:31 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:44:31 |       Error |  Test Log Message For : Error
+2024-24-06 05:44:31 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:44:31 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:44:31 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:44:31 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:50:09 |       Force | Current Logging Level : Trace
+2024-24-06 05:50:09 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:50:10 |       Force |  Test Log Message For : Force
+2024-24-06 05:50:10 |        None |  Test Log Message For : None
+2024-24-06 05:50:10 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:50:10 |       Error |  Test Log Message For : Error
+2024-24-06 05:50:10 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:50:10 | Information |  Test Log Message For : Information
+2024-24-06 05:50:10 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:50:10 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:50:10 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:50:49 |       Force | Current Logging Level : Trace
+2024-24-06 05:50:49 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:50:49 |       Force |  Test Log Message For : Force
+2024-24-06 05:50:49 |        None |  Test Log Message For : None
+2024-24-06 05:50:49 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:50:49 |       Error |  Test Log Message For : Error
+2024-24-06 05:50:49 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:50:49 | Information |  Test Log Message For : Information
+2024-24-06 05:50:49 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:50:49 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:50:49 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:51:03 |       Force | Current Logging Level : Trace
+2024-24-06 05:51:03 | Information |  Test Log Message For : Not Specified
+2024-24-06 05:51:03 |       Force |  Test Log Message For : Force
+2024-24-06 05:51:03 |        None |  Test Log Message For : None
+2024-24-06 05:51:03 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:51:03 |       Error |  Test Log Message For : Error
+2024-24-06 05:51:03 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:51:03 | Information |  Test Log Message For : Information
+2024-24-06 05:51:03 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:51:03 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:51:03 |       Trace |  Test Log Message For : Trace
+2024-24-06 05:52:24 |       Force | Current Logging Level : Trace
+2024-24-06 05:52:24 |        None |  Test Log Message For : Not Specified
+2024-24-06 05:52:24 |       Force |  Test Log Message For : Force
+2024-24-06 05:52:24 |        None |  Test Log Message For : None
+2024-24-06 05:52:24 |    Critical |  Test Log Message For : Critical
+2024-24-06 05:52:24 |       Error |  Test Log Message For : Error
+2024-24-06 05:52:24 |     Warning |  Test Log Message For : Warning
+2024-24-06 05:52:24 | Information |  Test Log Message For : Information
+2024-24-06 05:52:24 |       Debug |  Test Log Message For : Debug
+2024-24-06 05:52:24 |     Verbose |  Test Log Message For : Verbose
+2024-24-06 05:52:24 |       Trace |  Test Log Message For : Trace

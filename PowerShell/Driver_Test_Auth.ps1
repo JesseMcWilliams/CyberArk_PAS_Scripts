@@ -34,10 +34,10 @@ Using Module Logger
 
 # Import any needed modules.
 Import-Module ".\Modules\Configuration.psm1" -Force
-Import-Module ".\Modules\Credential.psm1" -Force
-Import-Module ".\Modules\CyberArk_Driver_REST.psm1" -Force
-Import-Module ".\Modules\CustomWebRequest.psm1" -Force
-Import-Module ".\Modules\PS_Script_Utilities.psm1" -Force
+#Import-Module ".\Modules\Credential.psm1" -Force
+#Import-Module ".\Modules\CyberArk_Driver_REST.psm1" -Force
+#Import-Module ".\Modules\CustomWebRequest.psm1" -Force
+#Import-Module ".\Modules\PS_Script_Utilities.psm1" -Force
 
 #region PowerShell Debug/Verbose output
 # Valid settings:  SilentlyContinue, Continue,

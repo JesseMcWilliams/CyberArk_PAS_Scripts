@@ -1,0 +1,195 @@
+2024-07-08 03:21:43 | Information | **************************************************
+2024-07-08 03:21:43 |       Force | ******************** Starting ********************
+2024-07-08 03:21:43 | Information | **************************************************
+2024-07-08 03:21:43 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 03:21:43 |       Force | Current Logging Level:  Trace
+2024-07-08 03:21:43 | Information | Analyzing the input file(s).
+2024-07-08 03:21:43 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 03:21:43 | Information |     File Name Only   :  Input_File_01
+2024-07-08 03:21:43 | Information |     File Extension   :  .csv
+2024-07-08 03:21:43 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 03:21:43 | Information |          File Size   :  5,368.00KB
+2024-07-08 03:21:43 | Information |       Rows Imported  :  30
+2024-07-08 03:21:43 | Information | Total Rows Imported  :  30
+2024-07-08 03:21:43 | Information | Sorted & Unique Rows :  30
+2024-07-08 03:21:43 | Information | Admin Creds Needed   :  6
+2024-07-08 03:21:43 | Information | Service Creds Needed :  5
+2024-07-08 03:21:43 | Information | Authenticating to the PVWA.
+2024-07-08 03:21:43 |       Debug | Requested Authentication Method:  PKIPN
+2024-07-08 03:21:44 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:16:03 | Information | **************************************************
+2024-07-08 06:16:03 |       Force | ******************** Starting ********************
+2024-07-08 06:16:03 | Information | **************************************************
+2024-07-08 06:16:03 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:16:03 |       Force | Current Logging Level:  Trace
+2024-07-08 06:16:03 | Information | Analyzing the input file(s).
+2024-07-08 06:16:03 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:16:03 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:16:03 | Information |     File Extension   :  .csv
+2024-07-08 06:16:03 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:16:03 | Information |          File Size   :  626.00KB
+2024-07-08 06:16:03 | Information |       Rows Imported  :  3
+2024-07-08 06:16:03 | Information | Total Rows Imported  :  3
+2024-07-08 06:16:03 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:16:03 | Information | Admin Creds Needed   :  1
+2024-07-08 06:16:03 | Information | Service Creds Needed :  3
+2024-07-08 06:16:03 | Information | Authenticating to the PVWA.
+2024-07-08 06:16:03 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:16:03 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:16:03 |       Debug | Saving psPAS session.
+2024-07-08 06:16:03 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:16:03 | Information | Getting server admin Account(s).
+2024-07-08 06:16:04 | Information | Getting Account Information:  AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132
+2024-07-08 06:16:04 |       Error | The Target Account was not Set!
+2024-07-08 06:16:04 |       Error | HTTP Response:  Invalid URI: The hostname could not be parsed. Run New-PASSession
+2024-07-08 06:16:04 |       Error | Response Data:  Invoke-PASRestMethod
+2024-07-08 06:16:29 | Information | **************************************************
+2024-07-08 06:16:29 |       Force | ******************** Starting ********************
+2024-07-08 06:16:29 | Information | **************************************************
+2024-07-08 06:16:29 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:16:29 |       Force | Current Logging Level:  Trace
+2024-07-08 06:16:29 | Information | Analyzing the input file(s).
+2024-07-08 06:16:30 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:16:30 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:16:30 | Information |     File Extension   :  .csv
+2024-07-08 06:16:30 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:16:30 | Information |          File Size   :  626.00KB
+2024-07-08 06:16:30 | Information |       Rows Imported  :  3
+2024-07-08 06:16:30 | Information | Total Rows Imported  :  3
+2024-07-08 06:16:30 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:16:30 | Information | Admin Creds Needed   :  1
+2024-07-08 06:16:30 | Information | Service Creds Needed :  3
+2024-07-08 06:16:30 | Information | Authenticating to the PVWA.
+2024-07-08 06:16:30 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:16:30 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:16:30 |       Debug | Saving psPAS session.
+2024-07-08 06:16:30 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:16:30 | Information | Getting server admin Account(s).
+2024-07-08 06:16:30 | Information | Getting Account Information:  AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132
+2024-07-08 06:16:30 |       Error | The Target Account was not Set!
+2024-07-08 06:16:30 |       Error | HTTP Response:  Invalid URI: The hostname could not be parsed. Run New-PASSession
+2024-07-08 06:16:30 |       Error | Response Data:  Invoke-PASRestMethod
+2024-07-08 06:19:50 | Information | **************************************************
+2024-07-08 06:19:50 |       Force | ******************** Starting ********************
+2024-07-08 06:19:50 | Information | **************************************************
+2024-07-08 06:19:50 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:19:50 |       Force | Current Logging Level:  Trace
+2024-07-08 06:19:50 | Information | Analyzing the input file(s).
+2024-07-08 06:19:50 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:19:51 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:19:51 | Information |     File Extension   :  .csv
+2024-07-08 06:19:51 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:19:51 | Information |          File Size   :  626.00KB
+2024-07-08 06:19:51 | Information |       Rows Imported  :  3
+2024-07-08 06:19:51 | Information | Total Rows Imported  :  3
+2024-07-08 06:19:51 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:19:51 | Information | Admin Creds Needed   :  1
+2024-07-08 06:19:51 | Information | Service Creds Needed :  3
+2024-07-08 06:19:51 | Information | Authenticating to the PVWA.
+2024-07-08 06:19:51 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:19:51 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:19:51 |       Debug | Saving psPAS session.
+2024-07-08 06:19:51 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:19:51 | Information | Getting server admin Account(s).
+2024-07-08 06:19:51 | Information | Getting Account Information:  AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132
+2024-07-08 06:19:51 |       Error | The Target Account was not Set!
+2024-07-08 06:19:51 |       Error | HTTP Response:  Invalid URI: The hostname could not be parsed. Run New-PASSession
+2024-07-08 06:19:51 |       Error | Response Data:  Invoke-PASRestMethod
+2024-07-08 06:21:04 | Information | **************************************************
+2024-07-08 06:21:04 |       Force | ******************** Starting ********************
+2024-07-08 06:21:04 | Information | **************************************************
+2024-07-08 06:21:04 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:21:04 |       Force | Current Logging Level:  Trace
+2024-07-08 06:21:04 | Information | Analyzing the input file(s).
+2024-07-08 06:21:04 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:21:04 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:21:04 | Information |     File Extension   :  .csv
+2024-07-08 06:21:04 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:21:04 | Information |          File Size   :  626.00KB
+2024-07-08 06:21:04 | Information |       Rows Imported  :  3
+2024-07-08 06:21:04 | Information | Total Rows Imported  :  3
+2024-07-08 06:21:04 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:21:04 | Information | Admin Creds Needed   :  1
+2024-07-08 06:21:04 | Information | Service Creds Needed :  3
+2024-07-08 06:21:04 | Information | Authenticating to the PVWA.
+2024-07-08 06:21:04 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:21:04 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:21:07 |       Debug | Saving psPAS session.
+2024-07-08 06:21:07 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:21:08 | Information | Getting server admin Account(s).
+2024-07-08 06:21:08 | Information | Getting Account Information:  AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132
+2024-07-08 06:21:08 | Information | 1 Account Found!.  Safe (AAA_Local_Test_Accounts_03) : Address (192.168.184.132) : Username (SVC_ADM_SRV_01)
+2024-07-08 06:21:09 |     Verbose | Retrieving Credential for Account (AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132) : ID (26_3))
+2024-07-08 06:21:09 | Information | Admin Credentials Retrieved (1).
+2024-07-08 06:21:09 | Information | Jobs Created. Count:  1
+2024-07-08 06:21:09 | Information | Submitting Jobs.
+2024-07-08 06:21:09 | Information | Submitted Jobs.  Waiting
+2024-07-08 06:21:10 | Information | Jobs Completed.
+2024-07-08 06:21:10 | Information | Job (1) Name (Vault) Started at ()
+2024-08-07 06:21:10 | 00000001 |                    Vault | Connecting to host (Vault.Bannermen.com).
+2024-08-07 06:21:10 | 00000001 |                    Vault | Connection FAILED to host (Vault.Bannermen.com).
+
+2024-07-08 06:21:10 | Information | Job Queue.
+2024-07-08 06:23:55 | Information | **************************************************
+2024-07-08 06:23:55 |       Force | ******************** Starting ********************
+2024-07-08 06:23:55 | Information | **************************************************
+2024-07-08 06:23:55 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:23:55 |       Force | Current Logging Level:  Trace
+2024-07-08 06:23:55 | Information | Analyzing the input file(s).
+2024-07-08 06:23:55 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:23:55 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:23:55 | Information |     File Extension   :  .csv
+2024-07-08 06:23:55 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:23:55 | Information |          File Size   :  626.00KB
+2024-07-08 06:23:55 | Information |       Rows Imported  :  3
+2024-07-08 06:23:55 | Information | Total Rows Imported  :  3
+2024-07-08 06:23:55 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:23:55 | Information | Admin Creds Needed   :  1
+2024-07-08 06:23:55 | Information | Service Creds Needed :  3
+2024-07-08 06:23:55 | Information | Authenticating to the PVWA.
+2024-07-08 06:23:55 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:23:55 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:23:56 |       Debug | Saving psPAS session.
+2024-07-08 06:23:56 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:27:35 | Information | **************************************************
+2024-07-08 06:27:36 |       Force | ******************** Starting ********************
+2024-07-08 06:27:36 | Information | **************************************************
+2024-07-08 06:27:36 |       Force | Writing to log file  :
+	Path:  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Logs\2024-08-07_Logger.log
+2024-07-08 06:27:36 |       Force | Current Logging Level:  Trace
+2024-07-08 06:27:36 | Information | Analyzing the input file(s).
+2024-07-08 06:27:36 |       Force |         Input File   :  Input_File_01.csv
+2024-07-08 06:27:36 | Information |     File Name Only   :  Input_File_01
+2024-07-08 06:27:36 | Information |     File Extension   :  .csv
+2024-07-08 06:27:36 | Information | Fully Qualified Path :  C:\Engagements\JesseMcWilliams\CyberArk_PAS_Scripts\PowerShell\Windows Services\Input_File_01.csv
+2024-07-08 06:27:36 | Information |          File Size   :  626.00KB
+2024-07-08 06:27:36 | Information |       Rows Imported  :  3
+2024-07-08 06:27:36 | Information | Total Rows Imported  :  3
+2024-07-08 06:27:36 | Information | Sorted & Unique Rows :  3
+2024-07-08 06:27:36 | Information | Admin Creds Needed   :  1
+2024-07-08 06:27:36 | Information | Service Creds Needed :  3
+2024-07-08 06:27:36 | Information | Authenticating to the PVWA.
+2024-07-08 06:27:36 |       Debug | Requested Authentication Method:  PKI
+2024-07-08 06:27:36 |       Debug | New URI Created:  https://vault.bannermen.com/
+2024-07-08 06:27:36 |       Debug | Saving psPAS session.
+2024-07-08 06:27:36 |       Debug | Clearing cookies from psPAS session.
+2024-07-08 06:27:36 | Information | Getting server admin Account(s).
+2024-07-08 06:27:37 | Information | Getting Account Information:  AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132
+2024-07-08 06:27:37 | Information | 1 Account Found!.  Safe (AAA_Local_Test_Accounts_03) : Address (192.168.184.132) : Username (SVC_ADM_SRV_01)
+2024-07-08 06:27:37 |     Verbose | Retrieving Credential for Account (AAA_Local_Test_Accounts_03/SVC_ADM_SRV_01/192.168.184.132) : ID (26_3))
+2024-07-08 06:27:38 | Information | Admin Credentials Retrieved (1).
+2024-07-08 06:27:38 | Information | Jobs Created. Count:  1
+2024-07-08 06:27:38 | Information | Submitting Jobs.
+2024-07-08 06:27:38 | Information | Submitted Jobs.  Waiting
+2024-07-08 06:27:38 | Information | Jobs Completed.
+2024-07-08 06:27:38 | Information | Job (1) Name (Vault) Started at ()
+2024-08-07 06:27:38 | 00000001 |                    Vault | Connecting to host (Vault.Bannermen.com).
+2024-08-07 06:27:38 | 00000001 |                    Vault | Connection FAILED to host (Vault.Bannermen.com).
+
+2024-07-08 06:27:38 | Information | Job Queue.
