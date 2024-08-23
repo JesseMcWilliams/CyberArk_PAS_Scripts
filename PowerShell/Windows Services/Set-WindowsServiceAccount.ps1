@@ -43,6 +43,7 @@
     .PARAMETER OutFile
     [string]:   This is the filename to write the results to, in a CSV format.  If not provided the Input filename will be used
                 with the word OUT appended to the name. <-- Not working yet.
+                Need to figure out a way to report back the data from the functions.
 
     .PARAMETER ThumbPrint
     [string]:   This is the thumbprint of the client certificate to be used during the
