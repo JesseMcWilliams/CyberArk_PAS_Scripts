@@ -3,3 +3,4 @@
 /PowerShell/*.pem
 /PowerShell/*/Conf
 /PowerShell/*/Logs
+PowerShell/*/Input_*.csv
