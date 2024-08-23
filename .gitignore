@@ -1,3 +1,5 @@
 /PowerShell/Conf
 /PowerShell/Logs
 /PowerShell/*.pem
+/PowerShell/*/Conf
+/PowerShell/*/Logs

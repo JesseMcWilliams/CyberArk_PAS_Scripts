@@ -3,64 +3,117 @@
     Stops all services listed for each server, Updates the Password, and Starts all services.
 
     .DESCRIPTION
+    Requires PowerShell 7+, psPAS 6.4.85+, Custom Logging Module, and Custom Utilities Module.
     This script leverages a configuration file to interface with the CyberArk PVWA and then it reads
-    the provided CSV file.  Each line should contain the server, service, and account to be used.
+    the provided CSV file(s).  Each line should contain the server, service, and account to be used.
     All input files will be combined, sorted, and deduped based on the Hostname and ServiceName.
     Uses psPAS Version '6.4.85' module from Pete Mann.  https://pspas.pspete.dev/
+    Command Line Parameters override the configuration file settings.
 
     .PARAMETER ConfigFile
-    [string]: This is the relative or fully qualified path to the Configuration file.  This is a
-              PowerShell Data File (PSD1).
+    [string]:   This is the relative or fully qualified path to the Configuration file.  This is a
+                PowerShell Data File (PSD1).
+                If not specified then a default file will be created.
+
+    .PARAMETER LogLevel
+    [string]:   This sets the level of logging to the console and to the log file.
+                The values are listed in order.  All levels above the one that is set will be output.
+        Valid Values:
+            Force   :  Always printed.
+            None    :  Prints None, and Force.
+            Critical:  Prints Critical, None, and Force
+            Error   :  Prints Error, Critical, None, and Force
+            Warning :  Prints Warning, Error, Critical, None, and Force
+         Information:  Prints Information, Warning, Error, Critical, None, and Force
+            Debug   :  Prints Debug, Information, Warning, Error, Critical, None, and Force
+            Verbose :  Prints Verbose, Debug, Information, Warning, Error, Critical, None, and Force
+            Trace   :  Prints Trace, Verbose, Debug, Information, Warning, Error, Critical, None, and Force
+
+    .PARAMETER LogFolder
+    [string]:   The relative or fully qualified path to a folder where the log files will be written.
+                Defaults:  .\Logs
+
+    .PARAMETER LogFile
+    [string]:   The Name of the log files.  The date will be prefixed onto the filename.
+                Defaults:  YYYY-MM-DD_Logger.log
 
     .PARAMETER InputFiles
-    [string]:  This is one or more CSV file(s) that contains the Servers, Services, and Target accounts.
+    [string[]]: This is one or more CSV file(s) that contain the Servers, Services, and Target accounts.
 
     .PARAMETER OutFile
-    [string]:  This is the filename to write the results to, in a CSV format.  If not provided the Input filename will be used
-                with the word OUT appended to the name.
+    [string]:   This is the filename to write the results to, in a CSV format.  If not provided the Input filename will be used
+                with the word OUT appended to the name. <-- Not working yet.
 
     .PARAMETER ThumbPrint
-    [string]:  This is the thumbprint of the client certificate to be used during the
-               authentication process.
+    [string]:   This is the thumbprint of the client certificate to be used during the
+                authentication process.
+
+    .PARAMETER AllowCPMDisabled
+    [bool]:     If the targeted service account is in a CPM Disabled state, should the script continue?
+
+    .PARAMETER MaxCPMWait
+    [int]:      The time in seconds to wait for the CPM to finish changing the targeted service account's password(s).
+                Once the time expires, you will be asked if you would like to keep waiting.
+
+    .PARAMETER Help
+    [switch]:   Displays Help information.
+
+    .PARAMETER RotateServicePassword
+    [bool]:     If True, the targeted service account's password will be rotated by the CPM.
 
     .INPUTS
-    [string] Configuration file.
-    [string] Input CSV file(s).
-    [string] Output CSV file.
-    [string] Client certificate thumbprint.
+    None
 
     .OUTPUTS
     None
 
     .NOTES
-    This script leverages the work of the following people.
+    This script leverages the work of the following people and others.
         https://github.com/allynl93
         https://github.com/infamousjoeg
         https://github.com/pspete
 
     This script will read the following attributes from the configuration file.
-    1. PVWA Address
-    2. PVWA Timeout
-    3. Host Timeout
-    4. Client Certificate Thumbprint
-    5. Input CSV file
+    Section Name:       Attribute Name
+    CyberArk_PVWA
+                    HTTP_Scheme     :  HTTP/HTTPS
+                    Address         :  IP address, Short Name, Fully Qualified Name
+                    Port            :  TCP port number
+                    IIS_Application :  The name of the Web Site in IIS
+                    IgnoreSSLErrors :  Ignore any certificate errors
+                    User_Authentication:  The type of authentication to be used with the PVWA
+    Logging
+                    Level           :  The logging level
+                    Folder          :  The folder to store log files in
+                    Filename        :  The name to use for log files
+    Inputs
+                    InputFiles      :  An array list of files to be read from
+                    OutFile         :  The file to write the output information to
+                    ThumbPrint      :  The thumbprint of the X.509 Client Certificate to use for authentication
+                    AllowCPMDisabled:  True or False
+                    MaxCPMWait      :  Time in seconds
+                    Reason          :  The reason for checking out the accounts from CyberArk Enterprise Password Vault
+                    Unlock          :  Forcibly unlock the targeted service accounts if they are locked
+                    RotateServicePassword:  Initiate a CPM change task
+    Threads
+                    Max             :  The number of background threads to use.  Split up on Hostname.  0 = Disabled
 
     This script leverages the following modules.
     1. Logger : This is a custom PowerShell logging module.
+                
 
     .EXAMPLE
-    Command Line:
-        Get_MFA_Cached_SSH_Key_PIV.ps1 -PVWAURL "https://epv.company.com" -SSHKeyFormat "PEM" -OutFile "MFA_SSH_Key" -OutPath "C:\Temp" -ThumbPrint "1783479e4888ce0fb0910eab691727d418e1ee82"
-    Output:
-        Getting CyberArk Auth Token from:  https://epv.company.com/PasswordVault/API/auth/pkipn/logon
-        Getting SSH Key from:  https://epv.company.com/PasswordVault/API/Users/Secret/SSHKeys/Cache
-        Getting SSH Key details
-        Writing KEY to file:  C:\Temp\MFA_SSH_Key.KEY.PEM
-        Writing PUB to file:  C:\Temp\MFA_SSH_Key.PUB.DER
-        *** SUCCESS ***
+        PS> .\Set-WindowsServiceAccount.ps1
+
+    .EXAMPLE
+        PS> .\Set-WindowsServiceAccount.ps1 -ConfigFile ".\Conf\Test_Config.psd1
+        
 #>
 
+# Import the required modules.
+#  Logger is a custom logging module that needs to be placed in your PowerShell Modules path.
 Using module Logger
+#  Utilities is a custom PowerShell module that needs to be in your PowerShell Moduels path.
 Using module Utilities
 
 #Using module "Modules\CustomWebRequest.psm1"
@@ -71,7 +124,7 @@ Using module Utilities
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $ConfigFile = ".\Conf\Test_Config.psd1",
+        [string] $ConfigFile,
 
         [Parameter(
             Mandatory = $false,
@@ -114,7 +167,7 @@ Using module Utilities
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [bool] $AllowCPMDisabled = $false,
+        [bool] $AllowCPMDisabled,
 
         [Parameter(
             Mandatory = $false,
@@ -156,7 +209,7 @@ Import-Module psPAS -Force -MinimumVersion 6.4.85
 # This will allow the output of any messages written with Write-Verbose.
 # For Verbose logging you can run the script with the -Verbose switch.
 # To enable verbose logging you can uncomment the following line.
-$VerbosePreference='Continue'
+#$VerbosePreference='Continue'
 
 # To disable verbose logging after forcing it on you can uncomment the following line.
 #$VerbosePreference='SilentlyContinue'
@@ -167,7 +220,7 @@ $VerbosePreference='Continue'
 #$DebugPreference='Continue'
 
 # To disable debug logging after forcing it on you can uncomment the following line.
-$DebugPreference='SilentlyContinue'
+#$DebugPreference='SilentlyContinue'
 
 
 # This will allow the output of any messages written with Write-Information.
@@ -212,6 +265,42 @@ $_pasSession = $null
 ########################################
 function New-CyberArkSession
 {
+    <#
+        .DESCRIPTION
+        Uses psPAS to create a new REST API session with the CyberArk Password Vault Web Access
+        (PVWA) server.
+
+        .PARAMETER AuthMethod
+        [string]    The type of authentication to be used when creating the new session.
+                    Supports:
+                        PKI:    Public Key Infrastructure.  X.509 certificate with the Enhanced Key
+                                Usage of Client Authentication (1.3.6.1.5.5.7.3.2)
+                        PKIPN:  Public Key Infrastructure with Pin. X.509 certificate with the Enhanced Key
+                                Usage of Client Authentication (1.3.6.1.5.5.7.3.2) that is stored on a
+                                Smart Card or YubiKey, and requires a personal Pin number to access.
+                    CyberArk:   Not Implemented.  This uses a local CyberArk user to authenticate with.
+                        LDAP:   Not Implemented.  This uses a domain based account to authenticate with.
+                        SAML:   Not Implemented.  This uses Single Sign On to authenticate with.
+                                This requires using an additional package and exe to work.
+        .PARAMETER Address
+        [string]    The short name, fully qualified domain name (FQDN), or IP address of the PVWA server.
+        
+        .PARAMETER Scheme
+        [string]    The HTTP Method to use.  HTTP or HTTPS.
+        
+        .PARAMETER Port
+        [int]       The TCP port to use when connecting to the PVWA server.  Default 443.
+        
+        .PARAMETER Application
+        [string]    The Application name within IIS that is being used.  Default PasswordVault.
+        
+        .PARAMETER IgnoreSSLErrors
+        [bool]      True or False.  If True, SSL / TLS certificate errors will be ignored.
+        
+        .PARAMETER ThumbPrint
+        [string]    If using PKI or PKIPN authentication then the certificate thumb print can be specified.
+                    This will be used for authentication to the PVWA server.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -301,7 +390,7 @@ function New-CyberArkSession
     $Logger.Write(("Saving psPAS session."), "Debug")
     $_pasSession = Get-PASSession
 
-    # Clear cookies if using PKI or PKIPN.  This avoids an API error.
+    # Clear cookies if using PKI or PKIPN.  This avoids an API error in later calls.
     if ((($AuthMethod -ieq "PKI") -or ($AuthMethod -ieq "PKIPN")) -and ($null -ne $_pasSession))
     {
         $Logger.Write(("Clearing cookies from psPAS session."), "Debug")
@@ -366,8 +455,7 @@ function Get-Session_PKIPN
     # Create a variable to hold the target thumbprint.
     $_targetThumbPrint = $ThumbPrint
 
-    # Get all user certificates.
-    # The user did not provided the thumbprint for a certificate.  Ask!
+    # Adding the System.Security assembly manually.  This avoids an occasional failure.
     Add-Type -AssemblyName System.Security
 
     # Get ALL Certificates in the current user's certificate store.  It must have a private key and be marked for Client Authentication.
@@ -410,7 +498,7 @@ function Get-Session_PKIPN
         exit 200
     }
 
-    # Make the request to start a new psPAS session.
+    # Build the request parameters for creating a new psPAS session.
     $_pasSessionAttributes = @{
         BaseURI = $URI.AbsoluteUri
         PVWAAppName = $Application
@@ -462,8 +550,7 @@ function Get-Session_PKI
     # Create a variable to hold the target thumbprint.
     $_targetThumbPrint = $ThumbPrint
 
-    # Get all user certificates.
-    # The user did not provided the thumbprint for a certificate.  Ask!
+    # Adding the System.Security assembly manually.  This avoids an occasional failure.
     Add-Type -AssemblyName System.Security
 
     # Get ALL Certificates in the current user's certificate store.  It must have a private key and be marked for Client Authentication.
@@ -506,7 +593,7 @@ function Get-Session_PKI
         exit 200
     }
 
-    # Make the request to start a new psPAS session.
+    # Build the request parameters for creating a new psPAS session.
     $_pasSessionAttributes = @{
         BaseURI = $URI.AbsoluteUri
         PVWAAppName = $Application
@@ -529,6 +616,34 @@ function Get-Session_PKI
 
 function Get-CyberArkAccount
 {
+    <#
+        .DESCRIPTION
+        This function searches for an account and gets the account details.  There is
+        an option to forcibly unlock the account if it is locked.  Unlocking the account
+        forcefully will not rotate the accounts password.
+
+        .PARAMETER Safename
+        [string]    This is the name of the safe that holds the account in CyberArk.
+
+        .PARAMETER Address
+        [string]    This is the address of the account in CyberArk.
+
+        .PARAMETER Username
+        [string]    This is the username of the account in CyberArk.
+
+        .PARAMETER Unlock
+        [bool]      This is True or False.  If True, the account will be forcibly 
+                    unlocked.  This does not rotate the account's password.
+
+        .OUTPUTS
+        [hashtable] A hash table is returned that has the following attributes.
+                    IsSuccess       [bool] True or False.  True if successful.
+                    Credential      [pscredential] null.
+                    LogonDomain     [string] The value stored in the Account's Lodon Domain field.
+                    AllAttributes   [pscustom] A custom PowerShell object containing the details
+                                    returned by the psPAS Get-AccountDetails.
+                    ID              [string] The ID of the account in CyberArk.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -681,6 +796,18 @@ function Get-CyberArkAccount
 
 function Reset-AccountPassword
 {
+    <#
+        .DESCRIPTION
+        This function will call the psPAS function to initiate the CPM Change Password within CyberArk.
+
+        .PARAMETER Accounts
+        [hashtable] A hashtable containing the accounts to have their passwords changed by CyberArk.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following values.
+                    IsSuccess   True or False.  If True then the call was successful.
+                    Results     A hashtable containing the details of the request and its outcome.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -692,6 +819,7 @@ function Reset-AccountPassword
     # Build the return object.
     $_retObj = @{
         IsSuccess = $false
+        Results = @{}
     }
 
     # Rotate the Account password(s)
@@ -728,6 +856,7 @@ function Reset-AccountPassword
             {
                 # Good to go. Set the result and Break out.
                 $_retObj["IsSuccess"] = $true
+                $_retObj["Results"] = $resultWait
                 break
             }
             else
@@ -756,6 +885,7 @@ function Reset-AccountPassword
                 {
                     # Drop to waiting on user.
                     $Logger.Write(("User's response ({0}).  Stop Waiting." -f $UsersChoice), "Verbose")
+                    $_retObj["Results"] = $resultWait
                 }
             }
         }
@@ -775,6 +905,27 @@ function Reset-AccountPassword
 }
 function Set-CyberArkAccountAction
 {
+    <#
+        .DESCRIPTION
+        This function will request the Action to be performed by the CPM on the Account specified.
+
+        .PARAMETER AccountID
+        [string]    This is the CyberArk Account ID of the account to request the CPM action on.
+
+        .PARAMETER Action
+        [string]    This is the CPM Action to be performed on the Account specified.
+                    Valid Actions:
+                        Verify      The Account's password will be verified by the CPM.
+                        Change      The Account's password will be changed by the CPM.
+                        Reconcile   The Account's password will be forcibly changed by a privileged account.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following attributes.
+                IsSuccess   True or False.
+                Message     Blank if successfull.  If request failed, the details returned.
+                ID          The Account ID provided.
+                Action      The Action requested.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -849,6 +1000,20 @@ function Set-CyberArkAccountAction
 }
 function Unlock-CyberArkAccount
 {
+    <#
+        .DESCRIPTION
+        This function will forcibly unlock the account requested.  The account's password will
+        not be rotated / changed.
+
+        .PARAMETER AccountID
+        [string]    The ID of the Account in CyberArk.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following attributes.
+                IsSuccess   True or False.
+                Message     Blank if successfull.  If request failed, the details returned.
+                ID          The Account ID provided.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -901,6 +1066,16 @@ function Unlock-CyberArkAccount
 }
 function Get-AllAccounts
 {
+    <#
+        .DESCRIPTION
+        This function will loop over the Accounts specified and get the details of each account.
+
+        .PARAMETER Accounts
+        [object[]]  This is the list of accounts to retrieve.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the account's details for each account.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -957,6 +1132,19 @@ function Get-AllAccounts
 
 function Submit-ReleaseAllAccounts
 {
+    <#
+        .DESCRIPTION
+        This function will call the Release / Check-in Account action.  This is only needed if
+        Exclusive Account Access is enabled.  If it is not then nothing will happen.
+        If Exclusive Access and One Time Password are enabled for this account the account's 
+        password will be rotated by the CPM before the account lock is released.
+
+        .PARAMETER Accounts
+        [string]    The ID of the Account within CyberArk.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the results of the release action.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -995,6 +1183,18 @@ function Submit-ReleaseAllAccounts
 
 function Submit-ReleaseAccount
 {
+    <#
+        .DESCRIPTION
+        This function calls the psPAS Unlock-PASAccount function.
+
+        .PARAMETER AccountID
+        [string]    The ID of the Account in CyberArk.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following attributes.
+                IsSuccess   True or False.
+                Message     Blank if successfull.  If request failed, the details returned.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -1055,6 +1255,19 @@ function Submit-ReleaseAccount
 }
 function Get-AllAccountContent
 {
+    <#
+        .DESCRIPTION
+        This function gets the password for all accounts specified.
+
+        .PARAMETER Accounts
+        [hashtable] A hashtable containing the list of accounts to retrieve the passwords for.
+
+        .PARAMETER Reason
+        [string]    The resaon for retrieving the account's password.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the details of the account and its password.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -1121,6 +1334,23 @@ function Get-AllAccountContent
 
 function Get-AccountCredential
 {
+    <#
+        .DESCRIPTION
+        This function calls the psPAS functions for Get-PASAccount and Get-PASAccountPassword.
+        If the Logon Domain is specified for the account it will be prefixed to the Username attribute.
+
+        .PARAMETER AccountID
+        [string]    The ID of the acccount in CyberArk to retrieve the credential for.
+
+        .PARAMETER Reason
+        [string]    The reason for retrieving the account's credential.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following attributes.
+                IsSuccess   [bool] True or False.
+                Message     [string] Blank if successfull.  If request failed, the details returned.
+                Credential  [pscredential] The account username and password.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -1220,6 +1450,26 @@ function Get-AccountCredential
 }
 function Get-AccountDetails
 {
+    <#
+        .DESCRIPTION
+        This function calls the psPAS function Get-PASAccountDetails.
+
+        .PARAMETER AccountID
+        [string]    The ID of the account in CyberArk.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the details of the account requested.
+            Attributes:
+                IsSuccess           True or False.
+                Message             Only populated if an error occured.
+                ID                  The ID of the Account in CyberArk.
+                Details             The details of the account.
+                ManagedByCPM        True, if the account is managed by a CPM.
+                CPMDisabled         If populated the CPM is disabled.  No actions will be performed.
+                CPMStatus           The status of the CPM's action on the account.
+                CPMErrorDetails     The details of the last error when the CPM attempted an action.
+                ImmediateCPMTask    The current CPM task to be performed on the account.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -1285,6 +1535,24 @@ function Get-AccountDetails
 
 function Watch-CPMChange
 {
+    <#
+        .DESCRIPTION
+        This function will watch the accounts specified while waiting for the CPM to perform the
+        requested Action.
+
+        .PARAMETER Accounts
+        [hashtable] A hashtable of the accounts to watch the CPM action on.
+
+        .PARAMETER Wait
+        [int]   The maximum time to wait for the CPM to complete the requested action on.
+
+        .OUTPUTS
+        [hashtable] A hashtable containing the following attributes.
+                IsSuccess       True or False.
+                AccountStatus   [hashtable] The current status of the accounts provided.
+                ExitReason      The reason for the exit.
+                ForceExit       An unrecoverable error occured and the script should exit.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
@@ -1501,13 +1769,35 @@ function Watch-CPMChange
 ########################################
 function Set-ServiceProperties
 {
+    <#
+        .DESCRIPTION
+        This function will loop over the Targeted Services and set the requested action on the
+        Windows service account.
+
+        .PARAMETER MaxThreads
+        [int]   If 0 no sub / job threads will be created.  This is split on the Hostname.
+                If greater than 0 then the number of background threads will be created.
+
+        .PARAMETER Action
+        [string]    The action to be performed on the service.
+
+        .PARAMETER AdminCreds
+        [hashtable] A hashtable containing the credentials needed to authenticate to the target server.
+
+        .PARAMETER ServiceCreds
+        [hashtable] A hashtable containing the credentials needed to run the target service.
+
+        .PARAMETER TargetServices
+        [hashtable] A hashtable containing the Host information and the Services to perform the
+                    requested action on.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
             Mandatory = $false,
             ValueFromPipeline = $false
             )]
-        [int] $MaxThreads = $script:_scriptConfig["Threads"]["Max"],
+        [int] $MaxThreads,
 
         [Parameter(
             Mandatory = $false,
@@ -1532,20 +1822,14 @@ function Set-ServiceProperties
             Mandatory = $false,
             ValueFromPipeline = $false
             )]
-        [object[]] $TargetServices,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $false
-            )]
-        [switch] $EnableThreads
+        [object[]] $TargetServices
     )
     
     # Check if Threading was requested.
-    if ($EnableThreads)
+    if ($MaxThreads -gt 0)
     {
         # Call the threaded function
-        return Set-ServicePropertiesThreaded @args
+        return Set-ServicePropertiesThreaded @PSBoundParameters
     }
     else
     {
@@ -1815,13 +2099,35 @@ function Set-ServiceProperties
 
 function Set-ServicePropertiesThreaded
 {
+    <#
+        .DESCRIPTION
+        This function will loop over the Targeted Services and set the requested action on the
+        Windows service account.
+
+        .PARAMETER MaxThreads
+        [int]   If 0 no sub / job threads will be created.  This is split on the Hostname.
+                If greater than 0 then the number of background threads will be created.
+
+        .PARAMETER Action
+        [string]    The action to be performed on the service.
+
+        .PARAMETER AdminCreds
+        [hashtable] A hashtable containing the credentials needed to authenticate to the target server.
+
+        .PARAMETER ServiceCreds
+        [hashtable] A hashtable containing the credentials needed to run the target service.
+
+        .PARAMETER TargetServices
+        [hashtable] A hashtable containing the Host information and the Services to perform the
+                    requested action on.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
             Mandatory = $false,
             ValueFromPipeline = $false
             )]
-        [int] $MaxThreads = $script:_scriptConfig["Threads"]["Max"],
+        [int] $MaxThreads,
 
         [Parameter(
             Mandatory = $false,
@@ -1846,13 +2152,7 @@ function Set-ServicePropertiesThreaded
             Mandatory = $false,
             ValueFromPipeline = $false
             )]
-        [object[]] $TargetServices,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $false
-            )]
-        [switch] $EnableThreads
+        [object[]] $TargetServices
     )
     # This function will multi thread the service management operations.
     # https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/write-progress-across-multiple-threads?view=powershell-7.4
@@ -2037,8 +2337,9 @@ function Set-ServicePropertiesThreaded
                     # Get the current status of the service.
                     $initialStatus = (Invoke-Command -Session $session -ScriptBlock { 
                         param($ServiceName)
+                        Write-Output ("Getting status of ({0}) on ({1}) as ({2})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe))
                         (Get-Service -Name $ServiceName).Status 2>&1
-                    } -ArgumentList $_targetService.ServiceName)
+                    } -ArgumentList $service.ServiceName)
 
                     # Output to the log.
                     $process.History += ("{0} | {1:d8} | {2,24} | Action ({3, 10}) | Service ({4}) | Initial Status `r`n(`r`n`t{5}`r`n).`r`n" -f 
@@ -2128,16 +2429,16 @@ function Set-ServicePropertiesThreaded
                             param($ServiceName)
                             Write-Output ("Getting status of ({0}) on ({1}) as ({2})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe))
                             (Get-Service -Name $ServiceName).Status 2>&1
-                        } -ArgumentList $_targeservicetService.ServiceName
+                        } -ArgumentList $service.ServiceName
                     }
 
                     # Capture the error
                     $_invokeError = $Error
 
                     # Output to the log.
-                    $process.History += ("{0} | {1:d8} | {2,24} | Action ({3, 10}) | Service ({4}) | Submitted.`r`n" -f 
+                    $process.History += ("{0} | {1:d8} | {2,24} | Action ({3, 10}) | Service ({4}) | Submitted | Response `r`n(`r`n`t{5}`r`n).`r`n" -f 
                     (Get-Date -Format "yyyy-MM-dd hh:mm:ss"), $PSItem.Id, $PSItem.Hostname,
-                    $PSItem.Action, $service.ServiceName)
+                    $PSItem.Action, $service.ServiceName, ($_invokeResponse -join "`r`n`t"))
 
                     # Set the timeout time.
                     $_moveOnTime = (Get-Date).AddSeconds($PSItem.TimeOut)
@@ -2151,15 +2452,33 @@ function Set-ServicePropertiesThreaded
                         # Get the current status of the service.
                         $postStatus = (Invoke-Command -Session $session -ScriptBlock { 
                             param($ServiceName)
+                            Write-Output ("Getting status of ({0}) on ({1}) as ({2})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe))
                             (Get-Service -Name $ServiceName).Status 2>&1
                          } -ArgumentList $service.ServiceName)
+
+                        $_curStatus = ""
+                        
+                        # Check if the Post Status is an object array.
+                        if ($postStatus.GetType() -eq [System.Object[]])
+                        {
+                            # Assign the Get-Service result to the current status.
+                            $_curStatus = $postStatus[1].ToString()
+                        }
+                        else
+                        {
+                            # Assign the result to the current status.
+                            $_curStatus = $postStatus.ToString()
+                        }
+
+                        # Sleep
+                        Start-Sleep -Seconds 5
                     }
-                    while ((-not ($postStatus -in $serviceStates)) -and ((Get-Date) -le $_moveOnTime))
+                    while ((-not ($serviceStates.Contains($_curStatus)) -and ((Get-Date) -le $_moveOnTime) -and (-not ($Error)) -and (-not ($_curStatus -ilike "Cannot find any service with service name*"))))
                     
                     # Output to the log.
-                    $process.History += ("{0} | {1:d8} | {2,24} | Action ({3, 10}) | Service ({4}) | Post Status `r`n(`r`n`t{5}`r`n) | Response ({6}).`r`n`r`n" -f 
+                    $process.History += ("{0} | {1:d8} | {2,24} | Action ({3, 10}) | Service ({4}) | Post Status `r`n(`r`n`t{5}`r`n)`r`n`r`n" -f 
                     (Get-Date -Format "yyyy-MM-dd hh:mm:ss"), $PSItem.Id, $PSItem.Hostname,
-                    $PSItem.Action, $service.ServiceName, ($postStatus -join "`r`n`t"), $_invokeResponse)
+                    $PSItem.Action, $service.ServiceName, ($postStatus -join "`r`n`t"))
 
                     # Add the Invoke Response to the job data.
                     $process.InvokeResponse += $_invokeResponse
@@ -2241,6 +2560,11 @@ function Set-ServicePropertiesThreaded
     else
     {
         $Logger.Write(("No Jobs Created! Count:  {0}" -f $_jobs.Count), "Error")
+        $Logger.Write(("    Max Threads  :  {0}" -f $MaxThreads), "Error")
+        $Logger.Write(("Requested Action :  {0}" -f $Action), "Error")
+        $Logger.Write(("    Admin Creds #:  {0}" -f $AdminCreds.Count), "Error")
+        $Logger.Write(("  Service Creds #:  {0}" -f $ServiceCreds.Count), "Error")
+        $Logger.Write(("Target Services #:  {0}" -f $TargetServices.Count), "Error")
         exit 404
     }
     
@@ -2386,10 +2710,11 @@ function Update-CommandLineParameter
 function Get-Help
 {
     # This function will print out the help information.
+    Get-Help $MyInvocation.MyCommand.Definition -Full
+    exit
 }
-
 #endRegion Help
-
+########################################
 ########################################
 #region Proccess Command Line Parameters
 ########################################
@@ -2473,7 +2798,7 @@ $script:_scriptConfig = @{
 #region Flow
 ########################################
 ########################################
-#region Configuration Loading
+    #region Configuration Loading
 ########################################
 # Verbose output with the script variables and their values.
 Write-Verbose ("******************** Script Variables ********************")
@@ -2536,7 +2861,7 @@ else
     if (!(Test-Path -Path $_confFileFullPath))
     {
         # The folder does not exist.  Create it.
-        Write-Verbose ("Creating File:  {0}" -f $_confFileFullPath)
+        Write-Host ("Creating File:  {0}" -f $_confFileFullPath)
         $null = New-Item -Path $_confFileFullPath -ItemType File
 
         try
@@ -2567,15 +2892,16 @@ else
 
 # Verbose output with the script variables and their values.
 Write-Verbose ("******************** New Script Variables ********************")
-Write-Verbose ("InputFiles:`r`n`t{0}" -f ($script:_scriptConfig["Inputs"]["InputFiles"] -join "`r`n`t"))
-Write-Verbose ("LogLevel  :  {0}" -f $script:_scriptConfig["Logging"]["Level"])
-Write-Verbose ("LogFolder :  {0}" -f $script:_scriptConfig["Logging"]["Folder"])
-Write-Verbose (" LogFile  :  {0}" -f $script:_scriptConfig["Logging"]["FileName"])
-Write-Verbose (" OutFile  :  {0}" -f $script:_scriptConfig["Inputs"]["OutFile"])
-Write-Verbose ("ThumbPrint:  {0}" -f $script:_scriptConfig["Inputs"]["ThumbPrint"])
-Write-Verbose ("MaxCPMWait:  {0}" -f $script:_scriptConfig["Inputs"]["MaxCPMWait"])
-Write-Verbose ("  Reason  :  {0}" -f $script:_scriptConfig["Inputs"]["Reason"])
-Write-Verbose ("  Unlock  :  {0}" -f $script:_scriptConfig["Inputs"]["Unlock"])
+Write-Verbose ("InputFiles :`r`n`t{0}" -f ($script:_scriptConfig["Inputs"]["InputFiles"] -join "`r`n`t"))
+Write-Verbose (" LogLevel  :  {0}" -f $script:_scriptConfig["Logging"]["Level"])
+Write-Verbose ("LogFolder  :  {0}" -f $script:_scriptConfig["Logging"]["Folder"])
+Write-Verbose ("  LogFile  :  {0}" -f $script:_scriptConfig["Logging"]["FileName"])
+Write-Verbose ("  OutFile  :  {0}" -f $script:_scriptConfig["Inputs"]["OutFile"])
+Write-Verbose ("ThumbPrint :  {0}" -f $script:_scriptConfig["Inputs"]["ThumbPrint"])
+Write-Verbose ("MaxCPMWait :  {0}" -f $script:_scriptConfig["Inputs"]["MaxCPMWait"])
+Write-Verbose ("   Reason  :  {0}" -f $script:_scriptConfig["Inputs"]["Reason"])
+Write-Verbose ("   Unlock  :  {0}" -f $script:_scriptConfig["Inputs"]["Unlock"])
+Write-Verbose ("Max Threads:  {0}" -f $script:_scriptConfig["Threads"]["Max"])
 Write-Verbose ("AllowCPMDisabled:  {0}" -f $script:_scriptConfig["Inputs"]["AllowCPMDisabled"])
 Write-Verbose ("RotateServicePassword:  {0}" -f $script:_scriptConfig["Inputs"]["RotateServicePassword"])
 Write-Verbose ("******************** New Script Variables ********************")
@@ -2593,7 +2919,7 @@ $Logger.Write("**************************************************", "Information
 $Logger.Write(("Writing to log file  :`r`n`tPath:  {0}" -f $Logger.GetLoggingFileFull()), "Force")
 $Logger.Write(("Current Logging Level:  {0}" -f $Logger.GetLoggingLevel()), "Force")
 ########################################
-#region Get Input Files
+    #region Get Input Files
 ########################################
 # Check if the input file(s) were specified.
 if (($null -ne $script:_scriptConfig["Inputs"]["InputFiles"]) -and ($script:_scriptConfig["Inputs"]["InputFiles"].Count -gt 1))
@@ -2650,7 +2976,7 @@ else
 #endRegion Get Input Files
 ########################################
 ########################################
-#region Analyze Input Files
+    #region Analyze Input Files
 ########################################
 # Analyze the Input file(s).
 $Logger.Write("Analyzing the input file(s).", "Information")
@@ -2737,7 +3063,13 @@ $Logger.Write(("Service Account(s) Retrieved ({0})." -f $_serviceCredentials.Cou
 # Stop the services.
 $Logger.Write("Stopping services.", "Information")
 
-$stopResult = Set-ServiceProperties -AdminCreds $_adminCredentials -TargetServices $_sortedInputData -Action "Stop"
+$_stopSetService = @{
+    AdminCreds = $_adminCredentials
+    TargetServices = $_sortedInputData
+    Action = "Stop"
+    MaxThreads  = $script:_scriptConfig["Threads"]["Max"]
+}
+$stopResult = Set-ServiceProperties @_stopSetService
 
 # Check if the Service Account password(s) should be changed automatically.
 if (($null -ne $script:_scriptConfig["Inputs"]["RotateServicePassword"]) -and ($script:_scriptConfig["Inputs"]["RotateServicePassword"]))
@@ -2771,19 +3103,31 @@ $_ProsSetService = @{
     TargetServices = $_sortedInputData
     Action = "Update"
     ServiceCreds = $resultServiceAccountContent
-    #EnableThreads = $true
+    MaxThreads  = $script:_scriptConfig["Threads"]["Max"]
 }
 $setResult = Set-ServiceProperties @_ProsSetService
 
 # Start the services.
 $Logger.Write("Starting services.", "Information")
 
-$startResult = Set-ServiceProperties -AdminCreds $_adminCredentials -TargetServices $_sortedInputData -Action "Start"
+$_startSetService = @{
+    AdminCreds = $_adminCredentials
+    TargetServices = $_sortedInputData
+    Action = "Start"
+    MaxThreads  = $script:_scriptConfig["Threads"]["Max"]
+}
+$startResult = Set-ServiceProperties @_startSetService
 
 # Check service status.
 $Logger.Write("Getting service status.", "Information")
 
-$statusResult = Set-ServiceProperties -AdminCreds $_adminCredentials -TargetServices $_sortedInputData -Action "Status"
+$_statusSetService = @{
+    AdminCreds = $_adminCredentials
+    TargetServices = $_sortedInputData
+    Action = "Status"
+    MaxThreads  = $script:_scriptConfig["Threads"]["Max"]
+}
+$statusResult = Set-ServiceProperties @_statusSetService
 
 # Release the server admin credential(s).
 $Logger.Write("Releasing the server administrator credential(s).", "Information")
