@@ -2834,21 +2834,29 @@ else
     # Warning
     Write-Warning ("No configuration file specified!`r`n`tGiven:  {0}" -f $ConfigFile)
 
+    # Create a variable to hold the fully qualified path to the configuration folder.
+    $_confFullPath = ""
+
     # Test / Create the Conf folder
     Write-Verbose ("Test if folder exists!`r`n`tFolder:  {0}" -f $_configPath)
 
-    # Get the fully qualified path from the relative default path.
-    $_confFullPath = (Get-Item -Path $_configPath).FullName
-
     # Test if the folder exists.  If not, create it.
-    if (!(Test-Path -Path $_confFullPath))
+    if (!(Test-Path -Path $_configPath))
     {
         # The folder does not exist.  Create it.
-        Write-Verbose ("Creating Folder:`r`n`tFolder:  {0}" -f $_confFullPath)
-        $null = New-Item -Path $_confFullPath -ItemType Directory
+        $null = New-Item -Path $_configPath -ItemType Directory
+
+        # Get the fully qualified path from the relative path.
+        $_confFullPath = (Get-Item -Path $_configPath).FullName
+
+        Write-Verbose ("Created Folder:`r`n`tFolder:  {0}" -f $_confFullPath)
+        
     }
     else
     {
+        # Get the fully qualified path from the relative path.
+        $_confFullPath = (Get-Item -Path $_configPath).FullName
+        
         Write-Verbose ("Folder Exists!`r`n`tFolder:  {0}" -f $_confFullPath)
     }
 
