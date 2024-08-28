@@ -1971,7 +1971,7 @@ function Set-ServiceProperties
                             $serviceCredential = ($ServiceCreds[$_targetService.ServiceCred])
                             $_invokeResponse = Invoke-Command -Session $session -ScriptBlock {
                                 param($ServiceName, [pscredential]$ServiceUser)
-                                Write-Output ("Updating ({0}) on ({1}) as ({2}) : Updating Run User to ({3})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe), $ServiceUser.Username)
+                                Write-Output ("Updating ({0}) on ({1}) as ({2}) : Updating Run User to ({3})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe), $ServiceUser.UserName)
                                 Set-Service -Name $ServiceName -Credential $ServiceUser 2>&1
                             } -ArgumentList $_targetService.ServiceName, $serviceCredential
                         }
@@ -2203,7 +2203,8 @@ function Set-ServicePropertiesThreaded
                 foreach ($_scn in $_credNames)
                 {
                     # Add the credential
-                    $_serviceCreds.Add($_scn, $ServiceCreds[$_scn])
+                    $Logger.Write(("Adding Service Credential:  {0}" -f $_scn.ServiceCred), "Verbose")
+                    $_serviceCreds.Add($_scn.ServiceCred, $ServiceCreds[$_scn.ServiceCred])
                 }
             }
 
@@ -2214,7 +2215,9 @@ function Set-ServicePropertiesThreaded
                 HostFqdn = $uh.HostFqdn         # This is the Hosts Fully Qualified Domain Name.
                 HostIP = $uh.HostIP             # This is the Host's IP address.
                 Timeout = $uh.TimeOut           # This is the TimeOut for making the host connection.
-                ServiceCreds = $_serviceCreds   # This is the credentials needed for the Windows Services.
+                ServiceCreds = $_serviceCreds
+                #_serviceCreds   # This is the credentials needed for the Windows Services.
+                #ServiceCreds
                 AdminCred = $AdminCreds[$uh.AdminCred] # This is the administrative credential needed to connect to the host.
                 Services = $_targetedServices   # This is a list of the services and service account credentials needed.
                 Action = $Action                # This is the action to be performed on the Windows Service.
@@ -2380,12 +2383,18 @@ function Set-ServicePropertiesThreaded
                     }
                     elseif ($PSItem.Action -ieq "Update")
                     {
+                        # Get the Service Credentials.
+                        $_serviceCredentials = $PSItem.ServiceCreds
+
+                        # Get the specific credential.
+                        $_targetServiceCred = $_serviceCredentials[$service.ServiceCred]
+
                         #Set the service Credential.
                         $_invokeResponse = Invoke-Command -Session $session -ScriptBlock {
                             param($ServiceName, [pscredential]$ServiceUser)
-                            Write-Output ("Updating service credential ({0}) on ({1}) as ({2}) : Updating Run User to ({3})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe), $ServiceUser.Username)
+                            Write-Output ("Updating service credential ({0}) on ({1}) as ({2}) : Updating Run User to ({3})" -f $ServiceName, $(HOSTNAME.EXE), $(whoami.exe), $ServiceUser.UserName)
                             Set-Service -Name $ServiceName -Credential $ServiceUser 2>&1
-                        } -ArgumentList $service.ServiceName, $PSItem.ServiceCreds[$service.ServiceCred]
+                        } -ArgumentList $service.ServiceName, $_targetServiceCred
                     }
                     elseif ($PSItem.Action -ieq "Disable")
                     {
@@ -2856,7 +2865,7 @@ else
     {
         # Get the fully qualified path from the relative path.
         $_confFullPath = (Get-Item -Path $_configPath).FullName
-        
+
         Write-Verbose ("Folder Exists!`r`n`tFolder:  {0}" -f $_confFullPath)
     }
 
