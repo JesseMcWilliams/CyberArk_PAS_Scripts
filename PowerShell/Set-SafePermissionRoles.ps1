@@ -1,27 +1,35 @@
 <#
     .SYNOPSIS
-    This script will create, update, or delete a safe or safes.
+    This script will set or remove the permissions specified in the input file(s) based on Roles.
 
     .DESCRIPTION
-    This script will take user inpurt or process one or more CSV files and perform the requested action
-    on the safe specified.  If no input files are specified or selected then the user will be prompted
-    for the needed information.
-
-    If an input file(s) are specified then an output file will be created with the result of the action.
-
+    This script will process one or more CSV files and perform the requested Safe Permission actions.
     Valid Actions:  Add, Update, Remove.
 
-    The input CSV file needs to have the following header.
-        Action,SafeName,Description,CPM
-
-        Action:  Add, Update, or Remove / Delete
+    The input CSV file needs to have the following header.  Header row cannot contain spaces.
+        SafeName,UserType,Username,Domain,Action,Role
 
         SafeName: This is the name of the safe to modify the owners list on.
 
+        UserType: This is the type of owner to be processed.  Valid values:  User / Group
+
+        UserName: This is the Username / SAMAccountName of the owner to be processed.
+
+        Domain  : This can be blank for Internal CyberArk Groups or Users.
+                  For domain Users or Groups use the LDAP Integration Name for domain based Users and Groups.
+
+        Action  : Add - Add new owner to safe / Update - Modify owner permissions on safe / Remove - Remove the safe owner.
+
+          Role  : This is the name of the Local CyberArk Group used to represent a role.
+                  This group should be assigned the role's permissions on the Template Safe.
+
+    A Template Safe (Z_Template_Safe_Permissions) is needed for the script to perform the requested actions.
+
+    Local CyberArk Groups are needed for the script to perform lookups of the role on the Template Safe.
+    Role Groups should start with the same prefix like "RG_" or "Role_".
+
     This script is written for PVWA version 12.2 or higher.
     This script requires PowerShell 5.1 or higher.
-
-    Version: 1.00
 
     .PARAMETER PVWAURL
     [string]: This is the base URL of the PVWA web server.  https://epv.company.com
@@ -45,14 +53,10 @@
     [switch]:  This will skip the validation of the remote server's certificate.
 
     .PARAMETER TemplateSafe
-    [string]:  The name of the template safe.
+    [string]:  The name of the safe to look up role permissions.
 
     .PARAMETER RoleNamePrefix
-    [string]:  The Prefix for the local CyberArk groups assigned to the template safe that designate the different roles.
-
-    .PARAMETER AssignDefaultPermissions
-    [boo]:  If True, the users listed in the global variable will be assigned to the new / updated safe with the same
-            permissions that they have assigned on the template safe.  Global Variable Name ($script:INCLUDESAFEMEMBERS)
+    [string]:  The prefix used to specify Local CyberArk Groups that represent a permission role.
 
     .PARAMETER InputFiles
     [string[]]:  An array holding one or more file names.
@@ -75,28 +79,37 @@
     .EXAMPLE
     This example is the most basic.  The user needs to have updated the PVWAURL, TemplateSafe, and RoleNamePrefix in the script.
 
-    .\Set-SafePermissionDetails.ps1
-
-
-    .EXAMPLE
-    PS> .\Manage-Safes.ps1
+    .\Set-SafePermissions.ps1
 
     .EXAMPLE
-    PS> $myCredential = Get-Credential
-    PS> .\Manage-Safes.ps1 -PVWAURL "https://epv.company.com" -AuthMethod "CyberArk" -Credential $myCredential
+    In this example the user's credential is stored in the variable $MyCred to allow repeat running of the script without having to re-enter
+    the credentials.  The user needs to have updated the PVWAURL, TemplateSafe, and RoleNamePrefix in the script.
+
+    $MyCred = Get-Credential
+    .\Set-SafePermissionRoles.ps1 -Credential $MyCred
 
     .EXAMPLE
-    PS> .\Manage-Safes.ps1 -PVWAURL "https://epv.company.com" -AuthMethod "PKIPN" -Thumbprint "1683476e4885ce0fb0410eab631727d418e1ee82"
+    In this example all required arguments are specified on the command line.
+
+    .\Set-SafePermissionRoles.ps1 -PVWAURL "https://epv.company.com" -TemplateSafe "Z_Template_Safe_Permissions" -RoleNamePrefix "RG_" -InputFiles @("Input_Safe_Permissions_1.csv","Input_Safe_Permissions_2.csv")
 
     .EXAMPLE
-    PS> $myCredential = Get-Credential
-    PS> .\Manage-Safes.ps1 -PVWAURL "https://epv.company.com" -AuthMethod "CyberArk" -Credential $myCredential `
-        -InputFiles @("C:\Scripts\Powershell\CyberArk Automation\Example_Safe_New.csv", "C:\Scripts\Powershell\CyberArk Automation\Example_Safe_Update.csv")
+    In this example a DOS / Command Line batch script is used to call the script.  The "^" carrot at the end is needed for line wrapping.
+    Create a DOC/Batch file name:  Set-SafePermissions.bat
+    Contnets:
+        CLS
+        @Echo Off
 
-    .EXAMPLE
-    PS> $myCredential = Get-Credential
-    PS> .\Manage-Safes.ps1 -PVWAURL "https://epv.company.com" -AuthMethod "CyberArk" -Credential $myCredential `
-        -InputFiles @("C:\Scripts\Powershell\CyberArk Automation\Example_Safe_New.csv")
+        set PVWAURL=https://epv.company.com
+        set AuthMethod=CyberArk
+        set TemplateSafe=Z_Template_Safe_Permissions
+        set RoleNamePrefix=RG_
+        set InputFiles=!Input_SafePermissions.csv
+
+        Echo Launching PowerShell script!
+        PowerShell -NoProfile -ExecutionPolicy Bypass -File ".\Set-SafePermissionRoles.ps1" ^
+        -PVWAURL "%PVWAURL%" -AuthMethod "%AuthMethod%" -TemplateSafe "%TemplateSafe%" ^
+        -RoleNamePrefix "%RoleNamePrefix%" -InputFiles %InputFiles% -SkipCertificateCheck
 #>
 
 [CmdletBinding()]
@@ -105,20 +118,20 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $PVWAURL,
+        [string] $PVWAURL = "https://epv.company.com",
 
         [Parameter(
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
             [ValidateSet('CyberArk','LDAP','SAML','PKI','PKIPN')]
-        [string] $AuthMethod = "PKIPN",
+        [string] $AuthMethod = "CyberArk",
 
         [Parameter(
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [pscredential] $Credential,
+        [pscredential] $Credential = $MyCred,
 
         [Parameter(
             Mandatory = $false,
@@ -160,22 +173,20 @@
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [bool] $AssignDefaultPermissions = $true,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string[]] $InputFiles #= @("C:\Users\060605\Documents\Scripts\CyberArk PAM\dse-cyberark\Powershell\CyberArk Automation\Example_Safe_Perm_Details.csv")
+        [string[]] $InputFiles
     )
 
 # Enable Verbose Logging :
 #$VerbosePreference='Continue'
 
 # Disable Verbose Logging:
-#$VerbosePreference='SilentlyContinue'
+$VerbosePreference='SilentlyContinue'
 
+# Force Certificate Checking to be skipped.
 #$SkipCertificateCheck = $true
+
+# Force Invoke-WebRequest to output verbose messages.  URL Join and Web Calls.
+$ForceWebVerboseMessages = $false
 
 
 ##########################################################
@@ -500,16 +511,6 @@ $PRIVATESSHURLS = @{
     }
 }
 
-$HEALTHURLS = @{
-    "ComponentDetails" = @{
-        URL = "/API/ComponentsMonitoringDetails/{ComponentID}/"
-        Method = "GET"
-    }
-    "Summary" = @{
-        URL = "/API/ComponentsMonitoringSummary/"
-        Method = "GET"
-    }
-}
 #endRegion URLs
 
 ##########################################################
@@ -633,20 +634,8 @@ $ALLSAFEPERMISSIONS = @(
 #$WEBSESSION = [Microsoft.PowerShell.Commands.WebRequestSession]::New()
 
 # UNIX epoch time origin
-$script:UNIXORIGIN = [System.DateTime]::New(1970,01,01,00,00,00)
+$UNIXORIGIN = [System.DateTime]::New(1970,01,01,00,00,00)
 
-# Template Safe Object place holder.
-$script:TEMPLATESAFEOBJ = $null
-
-# Script Variable to hold the CPMs.
-$script:CONFIGUREDCPMS = $null
-
-# Safe Members to include.
-$script:INCLUDESAFEMEMBERS = @(
-    "Vault Admins",
-    "SABAdmin",
-    "OBUsers"
-)
 # Map Authentication Methods to the required credential type.
 $AUTHTYPEREQ = @{
     "CyberArk" = "Credential"
@@ -961,6 +950,17 @@ function Join-Url
         [ValidateNotNullOrEmpty()]
         [string] $ChildPath
     )
+    # Check if Verbose Web Logging requested.
+    $_vpBefore = $VerbosePreference
+    if ($ForceWebVerboseMessages)
+    {
+        $VerbosePreference='Continue'
+    }
+    else
+    {
+        $VerbosePreference='SilentlyContinue'
+    }
+
 	# Setup function variables.
 	$_lastCharPath = $Path.Substring(($Path.Length - 1), 1)
 	$_firstCharChild = $ChildPath.Substring(0, 1)
@@ -974,10 +974,6 @@ function Join-Url
     elseif (($_lastCharPath.Equals('/') -and ($_firstCharChild.Equals('?'))))
 	{
 		$_returnURL = ("{0}{1}" -f $Path.Substring(0, ($Path.Length -1)), $ChildPath)
-	}
-    elseif ((-not $_lastCharPath.Equals('/') -and ($_firstCharChild.Equals('?'))))
-	{
-		$_returnURL = ("{0}{1}" -f $Path, $ChildPath)
 	}
 	elseif ((-not $_lastCharPath.Equals('/') -and ($_firstCharChild.Equals('/'))))
 	{
@@ -994,6 +990,11 @@ function Join-Url
 
 	# return URL
 	Write-Verbose ("{0} : Join-URL : Base ({1}) : Child ({2}) : `r`n`tJoined ({3})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $Path, $ChildPath, $_returnURL)
+
+    # Reset Verbose
+    $VerbosePreference = $_vpBefore
+
+    # Return
 	return $_returnURL
 }
 
@@ -1040,23 +1041,11 @@ function Get-QueryParameterString
 
 	)
 
-    # Check for trailing ? on BaseURI.
-    if ($BaseURI.Substring(($BaseURI.Length -1), 1) -eq "?")
-    {
-        $BaseURI = $BaseURI.Substring(0, ($BaseURI.Length -1))
-    }
-
     # Check for trailing slash on BaseURI.
     if ($BaseURI.Substring(($BaseURI.Length -1), 1) -eq "/")
     {
         $BaseURI = $BaseURI.Substring(0, ($BaseURI.Length -1))
     }
-
-    # Split on ?. In case the user passed in a raw string.
-    $_urlParts = $BaseURI.Split("?")
-
-    # Reset base URI.
-    $BaseURI = $_urlParts[0]
 
     # String to hold the value to be returned.
     $ReturnString = ""
@@ -1285,7 +1274,18 @@ function Invoke-PASRestMethod
 
 	)
 
-	Begin {
+    Begin {
+
+        # Check if Verbose Web Logging requested.
+        $_vpBefore = $VerbosePreference
+        if ($ForceWebVerboseMessages)
+        {
+            $VerbosePreference='Continue'
+        }
+        else
+        {
+            $VerbosePreference='SilentlyContinue'
+        }
 
 		Write-Verbose ("Invoke-PASRestMethod")
 		#Set defaults for all function calls
@@ -1543,7 +1543,11 @@ function Invoke-PASRestMethod
 
 	}
 
-	End { }
+	End
+    {
+        # Reset Verbose
+        $VerbosePreference = $_vpBefore
+    }
 
 }
 
@@ -2822,165 +2826,9 @@ function Add-Safe
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $Token,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Description,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $AssignedCPM,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [switch] $AssignDefaultPermissions
+        [string] $Token
     )
-
-    # Create the return object.
-    $_retObj = @{
-        IsSuccess = $false
-        Message = $null
-        Details = $null
-    }
-
-    # Get the URL Stub and Method
-    $_urlStubMethod = $SAFEURLS["AddSafe"]
-
-    # Get the URL Stub.
-    $_urlStub = $_urlStubMethod["URL"]
-
-    # Get the Method.
-    $_method = $_urlStubMethod["Method"]
-
-    # Build the body.
-    $_reqBody = @{
-        safeName = $SafeName
-    }
-
-    # Check if the description was providied.
-    if (($null -ne $Description) -and ($Description -ne ""))
-    {
-        $_reqBody.Add("description", $Description)
-    }
-
-    # Check if the Managing CPM was providied.
-    if (($null -ne $AssignedCPM) -and ($AssignedCPM -ne ""))
-    {
-        $_reqBody.Add("managingCPM", $AssignedCPM)
-    }
-
-    # Build the hash table to hold the web request properties.
-    $_requestAttributes = @{
-        URI = (Join-Url -Path $BaseURL -ChildPath $_urlStub)
-        Method = $_method
-        WebSession = $WebSession
-        Body = ($_reqBody | ConvertTo-Json)
-    }
-
-    # Clear the error.
-    $Error.Clear()
-
-    # Make the request.
-    $_result = Invoke-PASRestMethod @_requestAttributes
-
-    # Get the error.
-    $_curError = $Error
-
-    # Parse the results.
-    if (($null -ne $_result) -and ($_result -ne ""))
-    {
-        if (($_curError.Count -eq 0) -and ($AssignDefaultPermissions))
-        {
-            # Assign default permissions
-            $_subResult = Set-DefaultSafePermissions -BaseURL $BaseURL -Token $Token -SafeUrlId $_result.safeUrlId -TemplateSafe $TemplateSafe -IsNew
-
-            # Modify the sub result.
-            $_modResult = "@{"
-            foreach($_se in $_subResult.GetEnumerator())
-            {
-                # Test object type.
-                if ($_se.Value.GetType() -eq [System.Collections.Hashtable])
-                {
-                    # Add the Key.
-                    $_modResult += ("{0}" -f $_se.Key)
-                    $_modResult += "=@{"
-
-                    # Get the sub values.
-                    foreach ($_sse in $_se.Value.GetEnumerator())
-                    {
-                        #
-                        $_modResult += ("{0}={1};" -f $_sse.Key, $_sse.Value)
-                    }
-
-                    # Strip the trailing semi colon.
-                    $_modResult = $_modResult.Substring(0, ($_modResult.Length -1))
-
-                    # Add the end.
-                    $_modResult += "};"
-                }
-                else
-                {
-                    #
-                    $_modResult += ("{0}={1};" -f $_se.Key, $_se.Value)
-                }
-
-            }
-            # Strip the trailing semi colon.
-            $_modResult = $_modResult.Substring(0, ($_modResult.Length -1))
-
-            # Add the end.
-            $_modResult += "}"
-
-            # Build the return object.
-            $_retObj["IsSuccess"] = $true
-            $_retObj["Message"] = ($_result)
-            $_retObj["Details"] = $_modResult
-
-        }
-        elseif ($_curError.Count -eq 0)
-        {
-            # Build the return object.
-            $_retObj["IsSuccess"] = $true
-            $_retObj["Message"] = ($_result)
-            $_retObj["Details"] = $_result
-        }
-        else
-        {
-            # Build the return object.
-            $_retObj["IsSuccess"] = $false
-            $_retObj["Message"] = $_curError[0]
-            $_retObj["Details"] = $_curError[1]
-        }
-    }
-    else
-    {
-        $_retObj["IsSuccess"] = $false
-        $_retObj["Message"] = $_curError[0]
-        $_retObj["Details"] = $_curError[1]
-    }
-
-    # Output status
-    Write-Host ("{0} : Add Safe ({1}) Success ({2})" -f
-        (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-        $SafeName,
-        $_retObj.IsSuccess
-    )
-
-    # Return the result
-    return $_retObj
+    #
 }
 function Get-SafeID
 {
@@ -3083,204 +2931,6 @@ function Get-SafeID
     # Return the result
     return $_retObj
 }
-function Set-DefaultSafePermissions
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeUrlId,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $TemplateSafe,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [switch] $IsNew
-    )
-    # Create the return object.
-    $_retObj = @{
-        IsSuccess = $false
-        Message = @{}
-        Details = @{}
-    }
-
-    # Build request options
-    $_requestAttributes = @{
-        BaseURL = $BaseURL
-        Token = $Token
-    }
-
-    # Get Template Safe ID.
-    $_templateSafeID = Get-SafeID @_requestAttributes -SafeName $TemplateSafe
-
-    # Get Target Safe ID if not provided.
-    $_targetSafeID = @{Message = ""}
-    if (($null -eq $SafeUrlId) -or ($SafeUrlId -eq ""))
-    {
-        $_targetSafeID = Get-SafeID @_requestAttributes -SafeName $SafeName
-    }
-    else
-    {
-        $_targetSafeID.Message = $SafeUrlId
-    }
-
-    # Get Template Safe Permissions.
-    $_templateSafeMembers = Get-AllSafeMembers @_requestAttributes -SafeUrlId $_templateSafeID.Message -Filter @("includePredefinedUsers eq True")
-
-    # Filter the safe members to only include Non Role and Non Predefined users.
-    $_templateSafeNonRoleMembers = $_templateSafeMembers | Where-Object {$_.memberName -notlike ("{0}*" -f $RoleNamePrefix)}
-
-    # Get users specified in INCLUDESAFEMEMBERS
-    [object[]]$_templateSM = $_templateSafeNonRoleMembers | Where-Object {$_.memberName -in $script:INCLUDESAFEMEMBERS}
-
-    # Get Target Safe Permissions.
-    $_targetSafeMembers = $null
-    if (-not $IsNew)
-    {
-        $_targetSafeMembers = Get-AllSafeMembers @_requestAttributes -SafeUrlId $_targetSafeID.Message -Filter @("includePredefinedUsers eq True")
-    }
-
-    # Create a list of users for the target safe.
-    $_targetMemberNames = ($_targetSafeMembers | Select-Object -ExpandProperty "memberName")
-
-    # Process permissions and set new / updated.
-    Write-Verbose ("{0} : Process Template Safe Members." -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName)
-    foreach ($member in $_templateSM)
-    {
-        # Create and set member result.
-        $_memberResult = $false
-
-        Write-Verbose ("{0} : Checking Member:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName)
-
-        # Set Action
-        $_safeAction = ""
-
-        # Check if the Template permission already exists on the target safe
-        if (($null -ne $_targetSafeMembers) -and ($member.memberName -in $_targetMemberNames))
-        {
-            # Set Action
-            $_safeAction = "Update"
-
-            # Permission exists!  Update.
-            Write-Verbose ("{0} : Update Member:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName)
-
-            # Get the member attributes
-            $_member = @{
-                BaseURL = $BaseURL
-                Token = $Token
-                SafeUrlId = $_targetSafeID.Message
-                MemberName = $member.memberName
-                MemberType = $member.memberType
-                Permissions = $member.permissions
-            }
-
-            # Set the attributes.
-            $_memberResult = Update-SafeMember @_member
-        }
-        else
-        {
-            # Set Action
-            $_safeAction = "Add"
-
-            # Permission does NOT exist!  Add.
-            Write-Verbose ("{0} : Add Member:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName)
-
-            # Get the member attributes
-            $_member = @{
-                BaseURL = $BaseURL
-                Token = $Token
-                SafeUrlId = $_targetSafeID.Message
-                MemberName = $member.memberName
-                MemberType = $member.memberType
-                Permissions = $member.permissions
-            }
-
-            # Set the attributes.
-            $_memberResult = Add-SafeMember @_member
-        }
-
-        # Add details to return object.
-        $_retObj.Details.Add($member.memberName, $_memberResult)
-
-        # Check Member Result.
-        if ($_memberResult)
-        {
-            $_memberMessage = ("{0} : Safe ({3}) : Action ({2:f6}) : Result ({4}) : Member ({1})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName, $_safeAction, $member.safeName, "Success")
-            Write-Host $_memberMessage
-
-            $_retObj.Message.Add($member.memberName, $_memberMessage)
-        }
-        else
-        {
-            $_memberMessage = ("{0} : Safe ({3}) : Action ({2:f6}) : Result ({4}) : Member ({1})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $member.memberName, $_safeAction, $member.safeName, "Failure")
-            Write-Warning $_memberMessage
-
-            $_retObj.Message.Add($member.memberName, $_memberMessage)
-        }
-    }
-
-    # Check the success status and set it.
-    $_checkSuccess = $true
-    do
-    {
-        # While Check Success is True keep looping
-        foreach ($res in $_retObj.Details.Keys)
-        {
-            #
-            $_checkSuccess = $_retObj.Details[$res]
-
-        }
-
-        # If still true here.  Exit loop.
-        break
-    }
-    while ($_checkSuccess)
-
-    # Set the success status.
-    $_retObj.IsSuccess = $_checkSuccess
-
-    # Return true.
-    return $_retObj
-
-    # Code no longer needed.
-    # Get Template Safe Details.
-    #$_templateSafeDetails = Get-SafeDetails @_requestAttributes -SafeUrlId $_templateSafeID.Message
-
-    # Get Target Safe Details.
-    #$_targetSafeDetails = Get-SafeDetails @_requestAttributes -SafeUrlId $_targetSafeID.Message
-
-    # Filter the safe members to only include Role Groups.
-    #$_templateSafeRoleMembers = $_templateSafeMembers | Where-Object {$_.memberName -ilike ("{0}*" -f $RoleNamePrefix)}
-
-    # Get users specified in INCLUDESAFEMEMBERS
-    #[object[]]$_targetSM = $_targetSafeMembers | Where-Object {$_.memberName -in $script:INCLUDESAFEMEMBERS}
-}
 function Update-Safe
 {
     [CmdletBinding()]
@@ -3295,268 +2945,9 @@ function Update-Safe
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $Token,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Description,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $AssignedCPM,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [switch] $AssignDefaultPermissions
+        [string] $Token
     )
-    # Create the return object.
-    $_retObj = @{
-        IsSuccess = $false
-        Message = $null
-        Details = $null
-    }
-
-    # Get the URL Stub and Method
-    $_urlStubMethod = $SAFEURLS["UpdateSafe"]
-
-    # Get the URL Stub.
-    $_urlStub = $_urlStubMethod["URL"]
-
-    # Get the Method.
-    $_method = $_urlStubMethod["Method"]
-
-    # Build the body.
-    $_reqBody = @{
-        safeName = $SafeName
-    }
-
-    # Check if the description was providied.
-    if (($null -ne $Description) -and ($Description -ne ""))
-    {
-        $_reqBody.Add("description", $Description)
-    }
-
-    # Check if the Managing CPM was providied.
-    if (($null -ne $AssignedCPM) -and ($AssignedCPM -ne ""))
-    {
-        $_reqBody.Add("managingCPM", $AssignedCPM)
-    }
-
-    # Get Target Safe ID.
-    $_targetSafe = Get-SafeID -BaseURL $BaseURL -Token $Token -SafeName $SafeName
-
-    # Check if the target safe ID was retrieved.
-    if ($_targetSafe.IsSuccess)
-    {
-        # Get the target safe ID from the result.
-        $_targetSafeID = $_targetSafe.Message
-
-        # Update the URL with the Safe URL ID.
-        $_urlStub = $_urlStub.Replace("{SafeUrlId}", $_targetSafeID)
-
-        # Build the hash table to hold the web request properties.
-        $_requestAttributes = @{
-            URI = (Join-Url -Path $BaseURL -ChildPath $_urlStub)
-            Method = $_method
-            WebSession = $WebSession
-            Body = ($_reqBody | ConvertTo-Json)
-        }
-
-        # Clear the error.
-        $Error.Clear()
-
-        # Make the request.
-        $_result = Invoke-PASRestMethod @_requestAttributes
-
-        # Get the error.
-        $_curError = $Error
-
-        # Parse the results.
-        if (($null -ne $_result) -and ($_result -ne ""))
-        {
-            if (($_curError.Count -eq 0) -and ($AssignDefaultPermissions))
-            {
-                # Assign default permissions
-                $_subResult = Set-DefaultSafePermissions -BaseURL $BaseURL -Token $Token -SafeName $SafeName -TemplateSafe $TemplateSafe
-
-                # Modify the sub result.
-                $_modResult = "@{"
-                foreach($_se in $_subResult.GetEnumerator())
-                {
-                    # Test object type.
-                    if ($_se.Value.GetType() -eq [System.Collections.Hashtable])
-                    {
-                        # Add the Key.
-                        $_modResult += ("{0}" -f $_se.Key)
-                        $_modResult += "=@{"
-
-                        # Get the sub values.
-                        foreach ($_sse in $_se.Value.GetEnumerator())
-                        {
-                            #
-                            $_modResult += ("{0}={1};" -f $_sse.Key, $_sse.Value)
-                        }
-
-                        # Strip the trailing semi colon.
-                        $_modResult = $_modResult.Substring(0, ($_modResult.Length -1))
-
-                        # Add the end.
-                        $_modResult += "};"
-                    }
-                    else
-                    {
-                        #
-                        $_modResult += ("{0}={1};" -f $_se.Key, $_se.Value)
-                    }
-
-                }
-                # Strip the trailing semi colon.
-                $_modResult = $_modResult.Substring(0, ($_modResult.Length -1))
-
-                # Add the end.
-                $_modResult += "}"
-
-                # Build the return object.
-                $_retObj["IsSuccess"] = $true
-                $_retObj["Message"] = ($_result)
-                $_retObj["Details"] = $_modResult
-
-            }
-            elseif ($_curError.Count -eq 0)
-            {
-                # Build the return object.
-                $_retObj["IsSuccess"] = $true
-                $_retObj["Message"] = ($_result)
-                $_retObj["Details"] = $_result
-            }
-            else
-            {
-                # Build the return object.
-                $_retObj["IsSuccess"] = $false
-                $_retObj["Message"] = $_curError[0]
-                $_retObj["Details"] = $_curError[1]
-            }
-        }
-        else
-        {
-            $_retObj["IsSuccess"] = $false
-            $_retObj["Message"] = $_curError[0]
-            $_retObj["Details"] = $_curError[1]
-        }
-    }
-    else
-        {
-            $_retObj["IsSuccess"] = $false
-            $_retObj["Message"] = $_targetSafe.Message
-            $_retObj["Details"] = $_targetSafe.Details
-        }
-
-    # Output status
-    Write-Host ("{0} : Update Safe ({1}) Success ({2})" -f
-    (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-    $SafeName,
-    $_retObj.IsSuccess
-    )
-
-    # Return the result
-    return $_retObj
-}
-function Remove-Safe
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName
-    )
-    # Create the return object.
-    $_retObj = @{
-        IsSuccess = $false
-        Message = $null
-        Details = $null
-    }
-
-    # Get the URL Stub and Method
-    $_urlStubMethod = $SAFEURLS["DeleteSafe"]
-
-    # Get the URL Stub.
-    $_urlStub = $_urlStubMethod["URL"]
-
-    # Get the Method.
-    $_method = $_urlStubMethod["Method"]
-
-    # Get Target Safe ID.
-    $_targetSafe = Get-SafeID -BaseURL $BaseURL -Token $Token -SafeName $SafeName
-
-    # Update the url stub.
-    $_urlStub = $_urlStub.Replace("{SafeUrlId}", $_targetSafe.Message)
-
-    # Build the hash table to hold the web request properties.
-    $_requestAttributes = @{
-        URI = (Join-Url -Path $BaseURL -ChildPath $_urlStub)
-        Method = $_method
-        WebSession = $WebSession
-    }
-
-    # Clear the error.
-    $Error.Clear()
-
-    # Make the request.
-    $_result = Invoke-PASRestMethod @_requestAttributes
-
-    # Get the error.
-    $_curError = $Error
-
-    # Parse the results.
-    if (($null -ne $_curError))
-    {
-        # Build the return object.
-        $_retObj["IsSuccess"] = $true
-        $_retObj["Message"] = ("Safe ({0}) has been deleted." -f $SafeName)
-        $_retObj["Details"] = ""
-    }
-    else
-    {
-        $_retObj["IsSuccess"] = $false
-        $_retObj["Message"] = $_curError[0]
-        $_retObj["Details"] = $_curError[1]
-    }
-
-    # Output status
-    Write-Host ("{0} : Delete Safe ({1}) Success ({2})" -f
-    (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-    $SafeName,
-    $_retObj.IsSuccess
-    )
-
-    # Return the result
-    return $_retObj
+    #
 }
 function Get-AllSafes
 {
@@ -3937,12 +3328,6 @@ function Add-SafeMember
         [string] $SafeUrlId,
 
         [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName,
-
-        [Parameter(
             Mandatory = $true,
             ValueFromPipeline = $true
             )]
@@ -3986,12 +3371,6 @@ function Add-SafeMember
     # Get the Method.
     $_method = $_urlStubMethod["Method"]
 
-    # Get Target Safe ID if not provided.
-    if ((($null -eq $SafeUrlId) -or ($SafeUrlId -eq "")) -and ($null -ne $SafeName) -and ($SafeName -ne ""))
-    {
-        $SafeUrlId = (Get-SafeID -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $SafeName).Message
-    }
-
     # Replace the SafeUrlId.
     $_urlStub = $_urlStub.Replace("{SafeUrlId}", $SafeUrlId)
 
@@ -4024,7 +3403,13 @@ function Add-SafeMember
     }
 
     # Output Status.
-    Write-Verbose ("{0} :  Adding  : Safe URL ID ({1}) : Member Type ({2}) : Member Name ({3}) : `r`n`tPermissions:  `r`n`t`t{4}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $SafeUrlId, $MemberType, $MemberName, ($Permissions -join "`r`n`t`t"))
+    Write-Verbose ("{0} :  Adding  : Safe URL ID ({1}) : Member Type ({2}) : Member Name ({3}) : `r`n`tPermissions:  `r`n`t`t`t{4}" -f
+        (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
+        $SafeUrlId,
+        $MemberType,
+        $MemberName,
+        (($Permissions.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "`r`n`t`t`t")
+    )
 
     # Make the request.
     $_result = Invoke-PASRestMethod @_requestAttributes
@@ -4065,23 +3450,10 @@ function Update-SafeMember
         [string] $SafeUrlId,
 
         [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName,
-
-        [Parameter(
             Mandatory = $true,
             ValueFromPipeline = $true
             )]
         [string] $MemberName,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-            [ValidateSet("User", "Group")]
-        [string] $MemberType,
 
         [Parameter(
             Mandatory = $true,
@@ -4095,6 +3467,8 @@ function Update-SafeMember
             )]
         [datetime] $ExpirationDate
     )
+
+    $_resultSuccess = $false
     # https://<IIS_Server_Ip>/PasswordVault/API/Safes/{SafeUrlId}/Members/{MemberName}/
 
     # Get the URL Stub and Method
@@ -4105,12 +3479,6 @@ function Update-SafeMember
 
     # Get the Method.
     $_method = $_urlStubMethod["Method"]
-
-    # Get Target Safe ID if not provided.
-    if ((($null -eq $SafeUrlId) -or ($SafeUrlId -eq "")) -and ($null -ne $SafeName) -and ($SafeName -ne ""))
-    {
-        $SafeUrlId = (Get-SafeID -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $SafeName).Message
-    }
 
     # Replace the SafeUrlId.
     $_urlStub = $_urlStub.Replace("{SafeUrlId}", $SafeUrlId)
@@ -4147,7 +3515,12 @@ function Update-SafeMember
     }
 
     # Output Status.
-    Write-Verbose ("{0} : Updating : Safe URL ID ({1}) : Member Name ({2}) : `r`n`tPermissions:  `r`n`t`t{3}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $SafeUrlId, $MemberName, ($Permissions -join "`r`n`t`t"))
+    Write-Verbose ("{0} : Updating : Safe URL ID ({1}) : Member Name ({2}) : `r`n`tPermissions:  `r`n`t`t`t{3}" -f
+        (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
+        $SafeUrlId,
+        $MemberName,
+        (($Permissions.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "`r`n`t`t`t")
+    )
 
     # Make the request.
     $_result = Invoke-PASRestMethod @_requestAttributes
@@ -4191,12 +3564,6 @@ function Remove-SafeMember
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $SafeName,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
         [string] $MemberName
     )
     # https://<IIS_Server_Ip>/PasswordVault/API/Safes/{SafeUrlId}/Members/{MemberName}/
@@ -4210,24 +3577,13 @@ function Remove-SafeMember
     # Get the Method.
     $_method = $_urlStubMethod["Method"]
 
-    # Get Target Safe ID if not provided.
-    if ((($null -eq $SafeUrlId) -or ($SafeUrlId -eq "")) -and ($null -ne $SafeName) -and ($SafeName -ne ""))
-    {
-        $SafeUrlId = (Get-SafeID -BaseURL $_baseURL -Token $CyberArkAuthToken  -SafeName $SafeName).Message
-    }
-
     # Replace the SafeUrlId.
     $_urlStub = $_urlStub.Replace("{SafeUrlId}", $SafeUrlId)
 
     # Replace the MemberName.
     $_urlStub = $_urlStub.Replace("{MemberName}", $MemberName)
 
-    # Create the return object.
-    $_retObj = @{
-        IsSuccess = $false
-        Message = $null
-        Details = $null
-    }
+    $_resultSuccess = $false
 
     # Write Status.
     Write-Verbose ("{0} : Removing : Safe URL ID ({1}) : Member Name ({2})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $SafeUrlId, $MemberName)
@@ -4239,92 +3595,14 @@ function Remove-SafeMember
         WebSession = $WebSession
     }
 
-    # Clear the error.
-    $Error.Clear()
-
     # Make the request.
     $_result = Invoke-PASRestMethod @_requestAttributes
 
-    # Get the error.
-    $_curError = $Error
-
-    if (($_curError.Count -eq 0))
-    {
-        # Build the return object.
-        $_retObj["IsSuccess"] = $true
-        $_retObj["Message"] = ($_result)
-        $_retObj["Details"] = $_result
-    }
-    else
-    {
-        # Build the return object.
-        $_retObj["IsSuccess"] = $false
-        $_retObj["Message"] = $_curError[0]
-        $_retObj["Details"] = $_curError[1]
-    }
-
     # Return the result
-    return $_retObj
+    return $true
 }
 
 #endRegion CyberArk Safe Functions
-
-##########################################################
-#region Other CyberArk Functions
-##########################################################
-function Get-ConfiguredCPMs
-{
-     [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token
-    )
-
-    # Get the target URL.
-    $_targetURL = $HEALTHURLS["ComponentDetails"]
-    #/API/ComponentsMonitoringDetails/{ComponentID}/
-
-    # Remplace the Component ID.
-    $_newQueryStub = $_targetURL.URL.Replace("{ComponentID}", "CPM")
-
-    # Build the hash table to hold the web request properties.
-    $_requestAttributes = @{
-        URI = (Join-Url -Path $BaseURL -ChildPath $_newQueryStub)
-        Method = $_targetURL.Method
-        WebSession = $WebSession
-    }
-
-    # Make the request.
-    $_result = Invoke-PASRestMethod @_requestAttributes
-
-    # Process the result.
-    $_retObj = New-Object System.Collections.Generic.List[string]
-
-    # Check the result.
-    if (($null -ne $_result) -and ($_result -ne ""))
-    {
-        # The result is not null or blank.  Loop over
-        foreach ($comp in $_result.ComponentsDetails)
-        {
-            # Get the component name and add it to the list.
-            $_retObj.Add($comp.ComponentUserName)
-        }
-    }
-
-    # Return the result
-    return $_retObj
-    #
-}
-#endRegion Other CyberArk Functions
 
 ##########################################################
 #region Process Functions
@@ -4465,7 +3743,13 @@ function Import-SafePermissions
             Mandatory = $false,
             ValueFromPipeline = $true
             )]
-        [string] $AuthToken
+        [string] $AuthToken,
+
+        [Parameter(
+            Mandatory = $false,
+            ValueFromPipeline = $true
+            )]
+        [string] $TemplateSafe
     )
     # Create a variable to hold all safe names and URL IDs.
     $_allSafes = $null
@@ -4477,42 +3761,18 @@ function Import-SafePermissions
         # Build the hash table to hold the web request properties.
         $_requestAttributes = @{
             BaseURL = $BaseURL
+            Token = $AuthToken
         }
 
         # Get the template safe URL ID.
         $_allSafes = Get-AllSafes @_requestAttributes
     }
 
-    # Create a variable to hold the template safe properties, and member permissions.
-    $_templateSafe = $null
-    $_templateSafeMembers = $null
-    $_templateSafeRoleMembers = $null
+    # Get Template Safe ID.
+    $_templateSafeID = Get-SafeID @_requestAttributes -SafeName $TemplateSafe
 
-    # Check to see if the template safe has been retrieved.
-    if ($null -eq $_templateSafe)
-    {
-        # Get the template safe URL ID.
-        $_templateURLID = ($_allSafes | Where-Object {$_.SafeName -ieq $TemplateSafe}).SafeUrlId
-
-        Write-Host ("{0} : Getting template safe details.  Safe:  Name ({1}) URL ID ({2})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $TemplateSafe, $_templateURLID)
-
-        # Specify the request details.
-        $_requestAttributes = @{
-            BaseURL = $BaseURL
-            SafeUrlId = $_templateURLID
-        }
-
-        # Make the call to get the safe details.
-        $_templateSafe = Get-SafeDetails @_requestAttributes
-
-        Write-Host ("{0} : Getting template safe owners." -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
-        # Make the call to get the safe members.
-        $_templateSafeMembers = Get-AllSafeMembers @_requestAttributes -Filter @("memberType eq group", "includePredefinedUsers eq False")
-
-        # Filter the safe members to only include Role Groups.
-        $_templateSafeRoleMembers = $_templateSafeMembers | Where-Object {$_.memberName -ilike ("{0}*" -f $RoleNamePrefix)}
-
-    }
+    # Create a variable to hold the template safe permissions.
+    $_templateSafePermissions = Get-AllSafeMembers @_requestAttributes -SafeUrlId $_templateSafeID.Message -Filter @("includePredefinedUsers eq True")
 
     # Loop over the passed in files
     foreach ($_file in $Files)
@@ -4535,27 +3795,30 @@ function Import-SafePermissions
             $domainUserName = $_line.UserName
 
             # Build the Domain\User
-            if (-not ($_line.Domain -eq "") -and (-not ($_line.Domain -ieq "Vault")))
+            if (($null -ne $_line.Domain) -and ($_line.Domain -ne ""))
             {
-                $domainUserName = ("{0}\{1}" -f $_line.Domain, $_line.UserName)
-            }
-
-            # Build the Permissions hash table.
-            $_linePermissions = @{}
-
-            #  Loop over all possible permissions and check if they are present.
-            foreach ($perm in $ALLSAFEPERMISSIONS)
-            {
-                # Check if the line contains the permission.
-                if ($_line.PSobject.Properties.Name -Match $perm)
+                if ($_line.Domain -ieq "Vault")
                 {
-                    # Property exists.  Add it to hash table.
-                    $_linePermissions.Add($perm, $_line.$perm)
+                    $domainUserName = ("{0}\{1}" -f $_line.Domain, $_line.UserName)
                 }
             }
+
+            # Get the role permissions.
+            $_rolePermissions = ($_templateSafePermissions | Where-Object {$_.memberName -ieq $_line.Role})
+
+            # Build the Permissions hash table. System.Collections.ArrayList
+            $_linePermissions = @{}
+
+            # Build the permission list.
+            foreach ($perm in ($_rolePermissions.Permissions.PSObject.Properties))
+            {
+                # Add the permission to the list of permissions.
+                $_linePermissions.Add($perm.Name, $perm.Value)
+            }
+
             # Write status line
-            Write-Host ("{0} : Row ({1:d4}):  Safe ({2}) : User ({3}) : Action ({4})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_csvLoopCount, $_line.SafeName, $domainUserName, $_line.Action)
-            Write-Verbose ("`tPermissions `r`n`t`t{0}" -f (($_linePermissions.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "`r`n`t`t"))
+            Write-Host ("{0} : Row ({1:d4}):  Safe ({2}) : User ({3}) : Action ({4:f6}) : Role ({5})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_csvLoopCount, $_line.SafeName, $domainUserName, $_line.Action, $_line.Role)
+            #Write-Host ("`tPermissions `r`n`t`t{0}" -f (($_linePermissions.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "`r`n`t`t"))
 
             # Get the SafeUrlId from All Safes.
             $_targetSafe = ($_allSafes | Where-Object {$_.SafeName -ieq $_line.SafeName}).SafeUrlId
@@ -4568,10 +3831,21 @@ function Import-SafePermissions
                     BaseURL = $BaseURL
                     SafeUrlId = $_targetSafe
                 }
-                $_targetSafeMembers = Get-AllSafeMembers @_requestAttributes -Filter @("includePredefinedUsers eq False")
+                $_targetSafeMembers = Get-AllSafeMembers @_requestAttributes -Filter @("includePredefinedUsers eq True")
 
                 # Check if the requested member is already in the safe owners list.
-                $_targetUserAlreadymember = $_targetSafeMembers | Where-Object {$_.memberName -ieq $_line.Username}
+                $_targetSafeMemberNames = ($_targetSafeMembers | Select-Object memberName).memberName
+
+                # Create a variable to identify that the user is already a member.
+                $_targetUserAlreadymember = $false
+
+                # Check if target user is already a member of the target safe.
+                if ($_line.Username -in $_targetSafeMemberNames)
+                {
+                    # The target user is already a member of the target safe.
+                    $_targetUserAlreadymember = $true
+                }
+
 
                 # Set the target safe, user, and permission attributes.
                 $_requestAttributes = @{
@@ -4585,78 +3859,55 @@ function Import-SafePermissions
                 # Get the permissions if the action is not Delete / Remove.
                 if (($_line.Action -ine "Remove") -and ($_line.Action -ine "Delete"))
                 {
-                    Write-Verbose ("{0} : Getting Role Permissions :  Safe ({1})  Role Name ({2})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_templateSafe.safeName, $_line.Role)
-                    $_targetRolePermissions = ($_templateSafeRoleMembers | Where-Object {$_.memberName -ieq $_line.Role}).Permissions
+                    # Add the permissions to the request attributes.
+                    $_requestAttributes.Add("Permissions", $_linePermissions)
 
-                    # Check if permissions were retrieved.
-                    if (($null -ne $_targetRolePermissions) -and ($_targetRolePermissions -ne ""))
+                    # Check the action to be performed.
+                    if (($_line.Action -ieq "Add") -and (-not $_targetUserAlreadymember))
                     {
-                        # Add the permissions to the request attributes.
-                        $_requestAttributes.Add("Permissions", $_targetRolePermissions)
-
-                        # Check the action to be performed.
-                        if (($_line.Action -ieq "Add") -and ($null -eq $_targetUserAlreadymember))
-                        {
-                            # The user is NOT an owner of the safe.  Add.
-                            $_actionResultSuccess = Add-SafeMember @_requestAttributes
-                            $_messageAction = "Add"
-                        }
-                        elseif (($_line.Action -ieq "Add") -and ($null -ne $_targetUserAlreadymember))
-                        {
-                            # The user is an owner of the safe.  Update instead.
-                            $_requestAttributes.Remove("SearchIn")
-                            $_requestAttributes.Remove("MemberType")
-                            $_actionResultSuccess = Update-SafeMember @_requestAttributes
-                            $_messageAction = "Update"
-                        }
-                        elseif (($_line.Action -ieq "Update") -and ($null -eq $_targetUserAlreadymember))
-                        {
-                            # The user is NOT an owner of the safe.  Add instead.
-                            $_actionResultSuccess = Add-SafeMember @_requestAttributes
-                            $_messageAction = "Add"
-                        }
-                        elseif (($_line.Action -ieq "Update") -and ($null -ne $_targetUserAlreadymember))
-                        {
-                            # The user is an owner of the safe.  Update.
-                            $_requestAttributes.Remove("SearchIn")
-                            $_requestAttributes.Remove("MemberType")
-                            $_actionResultSuccess = Update-SafeMember @_requestAttributes
-                            $_messageAction = "Update"
-                        }
-                        else
-                        {
-                            # Unknown Action Requested.
-                            $_actionResultSuccess = $false
-                            $_messageAction = ("Unknown Action ({0})" -f $_line.Action)
-                        }
-
+                        # The user is NOT an owner of the safe.  Add.
+                        $_actionResultSuccess = Add-SafeMember @_requestAttributes
+                        $_messageAction = "Add"
+                    }
+                    elseif (($_line.Action -ieq "Add") -and ($_targetUserAlreadymember))
+                    {
+                        # The user is an owner of the safe.  Update instead.
+                        $_requestAttributes.Remove("SearchIn")
+                        $_requestAttributes.Remove("MemberType")
+                        $_actionResultSuccess = Update-SafeMember @_requestAttributes
+                        $_messageAction = "Update"
+                    }
+                    elseif (($_line.Action -ieq "Update") -and (-not $_targetUserAlreadymember))
+                    {
+                        # The user is NOT an owner of the safe.  Add instead.
+                        $_actionResultSuccess = Add-SafeMember @_requestAttributes
+                        $_messageAction = "Add"
+                    }
+                    elseif (($_line.Action -ieq "Update") -and ($_targetUserAlreadymember))
+                    {
+                        # The user is an owner of the safe.  Update.
+                        $_requestAttributes.Remove("SearchIn")
+                        $_requestAttributes.Remove("MemberType")
+                        $_actionResultSuccess = Update-SafeMember @_requestAttributes
+                        $_messageAction = "Update"
                     }
                     else
                     {
-                        # Get role names in template safe permissions.
-                        $_roleNamesOnTemplateSafeRaw = ($_templateSafeRoleMembers | Select-Object memberName).memberName
-
-                        # Build Safe Member Names
-                        $_roleNamesOnTemplateSafe = ($_roleNamesOnTemplateSafeRaw -join "`r`n`t`t`t")
-
-                        # Write warning.
-                        Write-Warning ("{0} : Specified Role Permissions NOT found in template safe!  Safe ({1}) | Role Name ({2}) | `r`n`tValid Safe Role Groups: `r`n`t`t {3}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_templateSafe.safeName, $_line.Role, $_roleNamesOnTemplateSafe)
-
-                        # The user is NOT an owner of the safe.  Add.
+                        # Unknown Action Requested.
                         $_actionResultSuccess = $false
-                        $_messageAction = "Role NOT Found!"
+                        $_messageAction = ("Unknown Action ({0})" -f $_line.Action)
                     }
 
                 }
                 else
                 {
-                    if ((($_line.Action -ieq "Remove") -or ($_line.Action -ieq "Delete")) -and ($null -eq $_targetUserAlreadymember))
+                    if ((($_line.Action -ieq "Remove") -or ($_line.Action -ieq "Delete")) -and (-not $_targetUserAlreadymember))
                     {
                         # The user is NOT an owner of the safe.  Nothing to do.
                         $_actionResultSuccess = $false
                         $_messageAction = "Not a member!"
                     }
-                    elseif ((($_line.Action -ieq "Remove") -or ($_line.Action -ieq "Delete")) -and ($null -ne $_targetUserAlreadymember))
+                    elseif ((($_line.Action -ieq "Remove") -or ($_line.Action -ieq "Delete")) -and ($_targetUserAlreadymember))
                     {
                         # Remove unneeded keys from request attributes.
                         $_requestAttributes.Remove("SearchIn")
@@ -4667,6 +3918,18 @@ function Import-SafePermissions
                         $_messageAction = "Remove/Delete"
                     }
                 }
+
+                # Status message.
+                # Write status line
+                Write-Host ("{0} : Row ({1:d4}):  Safe ({2}) : User ({3}) : Action ({4:f6}) : Success ({5})" -f
+                    (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
+                    $_csvLoopCount,
+                    $_line.SafeName,
+                    $domainUserName,
+                    $_messageAction,
+                    $_actionResultSuccess
+                )
+
             }
             else
             {
@@ -4709,367 +3972,6 @@ function Import-SafePermissions
 
     }
 }
-
-function Read-InputFiles
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-            )]
-        [string[]] $Files,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token
-    )
-
-    # Loop over the passed in files
-    foreach ($_file in $Files)
-    {
-        Write-Host ("{0} : Reading input file:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_file)
-
-        # Read the CSV file.
-        $_uifCSV = Import-Csv -Path $_file
-
-        # Track the loop count.
-        $_csvLoopCount = 1
-
-        # Loop over the CSV file.
-        foreach ($_line in $_uifCSV)
-        {
-            # Increment the loop count.
-            $_csvLoopCount++
-
-            # Output the status message.
-            Write-Verbose ("{0} : Processing Line ({1:d4}) : Action ({2}) : Safe Name ({3}) : CPM ({4}) : Description ({5})" -f
-            (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-            $_csvLoopCount,
-            $_line.Action,
-            $_line.SafeName,
-            $_line.CPM,
-            $_line.Description
-            )
-
-            # Build function payload.
-            $_funcPayload = @{
-                BaseURL = $_baseURL
-                Token = $Token
-                SafeName = $_line.SafeName
-                Description = $_line.Description
-                AssignedCPM = $_line.CPM
-            }
-
-            # Check if default permissions should be applied.
-            if ($AssignDefaultPermissions)
-            {
-                $_funcPayload.Add("AssignDefaultPermissions", $true)
-            }
-
-
-            # Check the Action Type
-            if ($_line.Action -ieq "Add")
-            {
-                # This will create a new safe.
-                $_result = Add-Safe  @_funcPayload
-            }
-            elseif ($_line.Action -ieq "Update")
-            {
-                # This will update an existing safe.
-                $_result = Update-Safe @_funcPayload
-            }
-            elseif (($_line.Action -ieq "Remove") -or ($_line.Action -ieq "Delete"))
-            {
-                # This will remove/delete an existing safe.
-                $_result = Remove-Safe -BaseURL $_baseURL -Token $Token -SafeName $_line.SafeName
-            }
-            else
-            {
-                # An unknown action was requested.
-                Write-Warning ("An invalid action was specified!  Line ({0:d4}) : Action ({1})" -f $_csvLoopCount, $_line.Action)
-                $_result = {
-                        IsSuccess = $false
-                        Message = ("Invalid Action Specified!  Action ({0})" -f $_line.Action)
-                        Details = ""
-                    }
-            }
-
-            # Update CSV record with results.
-            $_line | Add-Member -Name "Action Success" -Type NoteProperty -Value $_result.IsSuccess
-            $_line | Add-Member -Name "Action Message" -Type NoteProperty -Value $_result.Message
-            $_line | Add-Member -Name "Action Details" -Type NoteProperty -Value $_result.Details
-
-        }
-
-        # Write the results to screen.
-        Write-Verbose ("{0} : Action ({1}) : Safe ({2}) : Success ({3}) : Message ({4}) : Details (`r`n`t{5})" -f
-            (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-            $_line.Action,
-            $_line.SafeName,
-            $_result.IsSuccess,
-            $_result.Message,
-            ($_result.Details -join "`r`n`t")
-        )
-
-        # Write the results to the output file.
-        Write-Verbose ("{0} : Getting path of the input file:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_file)
-
-        # Determine if the variable $_file contains a relative or absolute path.
-        if (![System.IO.Path]::IsPathRooted($_file))
-        {
-            # Path is relative.  Get full path.
-            $_file = Resolve-Path -Path $_file
-
-        }
-
-        # Get the output folder path from the selected input file.
-        $_outputFilePath = [System.IO.Path]::GetDirectoryName($_file)
-
-        # Get the base filename from the selected input file.
-        $_outputFileName = [System.IO.Path]::GetFileName($_file)
-
-        # Build the new filename.
-        $_newOutputFileName = ("{0}_OUT_{1}" -f (Get-Date -Format "yyyy-MM-dd_HHmmss"), $_outputFileName)
-
-        # Build the full path and filename.
-        $_outputFile = Join-Path -Path $_outputFilePath -ChildPath $_newOutputFileName
-
-        # Write results to a new file.
-        Write-Host ("{0} : Writing results to:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_outputFile)
-        $_uifCSV | Export-Csv -Path $_outputFile -NoTypeInformation
-
-    }
-}
-
-function Get-UserInput
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token
-    )
-    # Create a loop so the user can create multiple safes.
-    $_keepLooping = $true
-
-    do
-    {
-        # Ask for the type of Action.
-        Write-Host ("")
-        Write-Host ("Valid Actions: ")
-        Write-Host ("`t  Add  :  Add a new safe.")
-        Write-Host ("`tUpdate :  Update an existing safe.")
-        Write-Host ("`tDelete :  Remove an existing safe.")
-        Write-Host ("`tDetails:  Get the safe details.")
-        Write-Host ("`tRemove :  Remove a safe member.")
-        $_action = Read-Host "Action"
-        #$_action = "Details"
-
-        # Ask for the Safe Name.
-        Write-Host ("")
-        Write-Host ("Please enter the safe name.")
-        $_safeName = Read-Host "Safe Name"
-        #$_safeName = "Test_Safe_002"
-
-        if (($_action -ieq "Delete") -or ($_action -ieq "Del"))
-        {
-            # This will remove/delete an existing safe.
-            $_result = Remove-Safe -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $_safeName
-        }
-        elseif (($_action -ieq "Add") -or ($_action -ieq "Update") -or ($_action -ieq "Upd"))
-        {
-            # Ask for the Safe Description.
-            Write-Host ("")
-            Write-Host ("Please enter the safe description.")
-            $_safeDescription = Read-Host "Safe Description"
-            #$_safeDescription = "Test Safe 002 Description."
-
-            # Ask for the CPM Name.
-            Write-Host ("")
-            Write-Host ("Valid CPMs:  `r`n`t{0}" -f ($script:CONFIGUREDCPMS -join "`r`n`t"))
-            Write-Host ("Please enter the CPM name.")
-
-            $_assignedCPM = Read-Host "CPM Name:  "
-
-            # Check the Action Type
-            if ($_action -ieq "Add")
-            {
-                # This will create a new safe.
-                $_result = Add-Safe -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $_safeName -Description $_safeDescription -AssignedCPM $_assignedCPM -AssignDefaultPermissions
-            }
-            elseif (($_action -ieq "Update") -or ($_action -ieq "Upd"))
-            {
-                # Build the Update options.
-                $_updateOptions = @{
-                    BaseURL = $_baseURL
-                    Token = $CyberArkAuthToken
-                    SafeName = $_safeName
-                    Description = $_safeDescription
-                    AssignedCPM = $_assignedCPM
-                }
-
-                # Ask if the user wants to reset the default safe permissions.
-                Write-Host ("")
-                $_resetDefaultPermissions = Read-Host "Reset Default Safe Permissions?  Y/[N]"
-                #$_resetDefaultPermissions = "Yes"
-
-                # Choose the action.
-                if (($_resetDefaultPermissions -ieq "Y") -or ($_resetDefaultPermissions -ieq "Yes"))
-                {
-                    # Yes.  Reset default safe permissions.
-                    # This will update an existing safe.
-                    $_result = Update-Safe @_updateOptions -AssignDefaultPermissions
-                }
-                else
-                {
-                    # This will update an existing safe.
-                    $_result = Update-Safe @_updateOptions
-                }
-            }
-
-        }
-        elseif (($_action -ieq "Details") -or ($_action -ieq "Det"))
-        {
-            # Get the safe details and members.
-            $_result = Show-SafeDetails -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $_safeName
-        }
-        elseif (($_action -ieq "Remove") -or ($_action -ieq "Rem"))
-        {
-            # Get the target member to be removed.
-            Write-Host ("")
-            Write-Host ("Please enter the safe member name below.")
-            $_targetMember = Read-Host "Member Name"
-
-            # Clear the current user from the safe members.
-            $_result = Remove-SafeMember -BaseURL $_baseURL -Token $CyberArkAuthToken -SafeName $_safeName -MemberName $_targetMember
-
-            # Output message
-            Write-Host ("{0} : Remove Safe Member ({1}) Success ({2})" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_targetMember,$_result.IsSuccess)
-        }
-        else
-        {
-            # An unknown action was requested.
-            Write-Warning ("An invalid action was specified!  Action ({0})" -f $_action)
-            $_result = {
-                    IsSuccess = $false
-                    Message = ("Invalid Action Specified!  Action ({0})" -f $_action)
-                    Details = ""
-                }
-        }
-
-        # Write the results to screen.
-        Write-Verbose ("{0} : Action ({1}) : Safe ({2}) : Success ({3}) : Message ({4}) : Details (`r`n`t{5})" -f
-            (Get-Date -Format "yyyy-MM-dd HH:mm:ss"),
-            $_action,
-            $_safeName,
-            $_result.IsSuccess,
-            $_result.Message,
-            ($_result.Details -join "`r`n`t")
-        )
-
-        # Ask the user if they want to Manage another safe.
-        $_userInput = Read-Host "Manage another safe?  [Y]/N"
-        #$_userInput = "n"
-
-        # Update the variable Keep Looping.
-        if (($_userInput -ieq "Y") -or ($_userInput -ieq "Yes"))
-        {
-            $_keepLooping = $true
-        }
-        elseif (($_userInput -ieq "N") -or ($_userInput -ieq "No"))
-        {
-            $_keepLooping = $false
-        }
-        else
-        {
-            $_keepLooping = $true
-        }
-
-    }
-    while ($_keepLooping)
-}
-
-function Show-SafeDetails
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-            )]
-        [string] $BaseURL,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $Token,
-
-        [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
-            )]
-        [string] $SafeName
-    )
-    # Get the safe URL ID.
-    # Get Target Safe ID.
-    $_targetSafe = Get-SafeID -BaseURL $BaseURL -Token $Token -SafeName $SafeName
-
-    # Get the safe details.
-    $_targetDetails = Get-SafeDetails -BaseURL $BaseURL -Token $Token -SafeUrlId $_targetSafe.Message
-
-    # Get Target Safe Permissions.
-    $_targetSafeMembers = Get-AllSafeMembers -BaseURL $BaseURL -Token $Token -SafeUrlId $_targetSafe.Message -Filter @("includePredefinedUsers eq True")
-
-    # Filter to group members
-    $_targetSafeGroups = ($_targetSafeMembers | Where-Object {$_.memberType -eq "Group"})
-
-    # Filter to user members
-    $_targetSafeUsers = ($_targetSafeMembers | Where-Object {$_.memberType -eq "User"})
-
-    # Display the safe details.
-    Write-Host ("Safe Details")
-    Write-Host ("`t       Safe Name  :  {0}" -f $_targetDetails.safeName)
-    Write-Host ("`tSafe Description  :`r`n`t-->{0}" -f $_targetDetails.description.Replace("`n", "`r`n`t-->"))
-    Write-Host ("`t    Managing CPM  :  {0}" -f $_targetDetails.managingCPM)
-    Write-Host ("`t  Number of Days  :  {0}" -f $_targetDetails.numberOfDaysRetention)
-    Write-Host ("`tNumber of Versions:  {0}" -f $_targetDetails.numberOfVersionsRetention)
-    Write-Host ("`t    Safe Created  :  {0}" -f ((Get-Date $script:UNIXORIGIN).AddSeconds($_targetDetails.creationTime)))
-    Write-Host ("`t   Safe Modified  :  {0}" -f ((Get-Date $script:UNIXORIGIN).AddMilliseconds(($_targetDetails.lastModificationTime)/1000)))
-    Write-Host ("`t Safe Created By  :  {0}" -f $_targetDetails.creator.name)
-    Write-Host ("`t    OLAC Enabled  :  {0}" -f $_targetDetails.olacEnabled)
-
-    # Loop over the members of type Group
-    Write-Host ("Safe Members:  Group")
-    foreach ($member in $_targetSafeGroups)
-    {
-        Write-Host ("`t{0}" -f $member.memberName)
-    }
-
-    # Loop over the members of type User
-    Write-Host ("Safe Members:  User")
-    foreach ($member in $_targetSafeUsers)
-    {
-        Write-Host ("`t{0}" -f $member.memberName)
-    }
-}
 #endRegion Process Functions
 
 ##########################################################
@@ -5090,8 +3992,14 @@ Write-Host ("{0} : Asking for file(s)." -f (Get-Date -Format "yyyy-MM-dd HH:mm:s
 # Get the input file(s).
 if (($null -eq $InputFiles) -or ($InputFiles -eq ""))
 {
-    # Open file dialog.
     [array]$InputFiles = Get-InputFiles -StartLocation (Get-Location) -FileFilter "CSV files (*.csv)|*.csv"
+}
+
+# Check the input files again.
+if (($null -eq $InputFiles) -or ($InputFiles -eq ""))
+{
+    # No files selected or passed in.  Exit with error.
+    Stop-Exit -Code 30
 }
 
 Write-Host ("{0} : Getting Authentication Token from:  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $_baseURL)
@@ -5102,24 +4010,8 @@ $CyberArkAuthToken = Register-Authentication -AuthMethod $AuthMethod -Credential
 # Check the CyberArk Auth Token to see if it is present.
 if (($null -ne $CyberArkAuthToken) -and ($CyberArkAuthToken -ne ""))
 {
-    # Get the list of CPMs.
-    $script:CONFIGUREDCPMS = Get-ConfiguredCPMs -BaseURL $_baseURL -Token $CyberArkAuthToken
-
-    # Check the input files again.
-    if (($null -eq $InputFiles) -or ($InputFiles -eq ""))
-    {
-        # No files selected or passed in.  Prompt the user for information.
-        $results = Get-UserInput -BaseURL $_baseURL -Token $CyberArkAuthToken
-    }
-    else
-    {
-        # Process the input file(s)
-        $results = Read-InputFiles -BaseURL $_baseURL -Files $InputFiles -Token $CyberArkAuthToken
-    }
-
-    #
     # Call the Safe Permissions Function
-    #Import-SafePermissions -BaseURL $_baseURL -Files $InputFiles -AuthToken $CyberArkAuthToken
+    Import-SafePermissions -BaseURL $_baseURL -Files $InputFiles -AuthToken $CyberArkAuthToken -TemplateSafe $TemplateSafe
 }
 else
 {
